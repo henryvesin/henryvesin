@@ -40,6 +40,51 @@ leaving two contradictory facts.
   updated whenever a department or exhibit is added, removed, or
   replaced.
 
+## Appearance switch — "Uusi ilme" (2026-08-02)
+
+Added by direct request during a pair session (not an autonomous run),
+so it isn't in `agent/LOG.md`'s run history in the usual sense, but it's
+now permanent site structure and every future page must include it.
+
+- Every page has a fixed top-right control (`.theme-switch`) offering
+  two states: **Vakiomuoto · Standard** (default) and **Uusi ilme · New
+  look**. In-fiction framing: the office was made to do the standard
+  corporate "brand refresh" every institution eventually suffers, and
+  it looks exactly like every other big-bold-black agency site — that
+  resemblance is the joke, not a design failure to fix.
+- Mechanism: clicking sets `data-theme="agency"` on `<html>` and
+  persists the choice in `localStorage` (key `kaaos-theme`), read back
+  via a small inline snippet in each page's `<head>` (before the
+  stylesheet links) to avoid a flash of the wrong theme on load.
+  Implemented in `assets/theme-switch.js`.
+- **The alternate look is token values only** — `tokens.css` redefines
+  the same custom properties under `:root[data-theme="agency"]` (black
+  paper, white ink, brighter red/blue accents, a much larger type
+  scale via `clamp()`, tight negative letter-spacing, uppercase
+  headings). `base.css` needed only a handful of scoped
+  `[data-theme="agency"]` rules beyond that (wordmark size, nav
+  spacing, link-hover invert, border widths) — see the "Uusi ilme"
+  section near the end of that file. Any new component should keep
+  reading tokens rather than hardcoding colors, precisely so this kind
+  of theme swap keeps working for free.
+- `--color-vitrine` (always white, in both themes) was pulled out as
+  its own token so the exhibit display-case background stays literal
+  white on both the paper background and on black — a lit case in a
+  dark gallery room under "Uusi ilme".
+- Like the exhibit toys, the switch is JS-only and degrades by simply
+  not appearing (`<noscript>` hides it) — the standard appearance is
+  always the complete, functional default.
+- On narrow viewports (`max-width: 30rem`) the switch drops
+  `position: fixed` and renders as a normal full-width bar at the very
+  top of `<body>` instead — there isn't room for a floating corner
+  control next to the oversized "Uusi ilme" wordmark at phone widths.
+- Every page must include, in this order: the inline `<head>` snippet
+  right after `<meta charset>`, the `<noscript>` + `.theme-switch`
+  markup as the first thing in `<body>` (before `.masthead`), and
+  `<script src=".../assets/theme-switch.js"></script>` near the end of
+  `<body>`. Copy an existing page's blocks exactly and fix the
+  relative path depth — same convention as the hardcoded nav.
+
 ## Departments
 
 ### Sattumavarasto (Warehouse of Coincidences)

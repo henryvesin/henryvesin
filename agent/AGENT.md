@@ -66,6 +66,12 @@ adding a new department.
 - **Navigation is hardcoded HTML on every page**, not JS-injected, for
   the same no-JS-required reason. Copy the masthead/nav block from an
   existing page and fix the relative path depth.
+- **Every page carries the "Uusi ilme" appearance switch** (inline
+  `<head>` snippet, `.theme-switch` markup right after `<body>`,
+  `assets/theme-switch.js` near the end of `<body>`) — see
+  `agent/CANON.md`'s "Appearance switch" entry for the full contract.
+  New pages must include all three pieces; copy them from an existing
+  page like the nav.
 - **Palette, type, spacing, rules:** all defined once in
   `assets/tokens.css`. Every page consumes tokens only — never define a
   new color, font, or one-off spacing value on a page. If a new visual
@@ -159,7 +165,7 @@ Steps, every run:
 CNAME
 README.md
 run.sh
-assets/{tokens.css, base.css, shared.js}
+assets/{tokens.css, base.css, shared.js, theme-switch.js}
 osastot/{index.html, <slug>/index.html}
 nayttely/{index.html, <slug>/index.html}
 tiedotteet/{index.html, YYYY-MM-DD-<slug>.html}

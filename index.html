@@ -2,6 +2,7 @@
 <html lang="fi">
 <head>
 <meta charset="utf-8">
+<script>(function(){try{if(localStorage.getItem("kaaos-theme")==="agency"){document.documentElement.setAttribute("data-theme","agency");}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kaaostoimisto — Etusivu / Front desk</title>
 <meta name="description" content="Kaaostoimisto hallinnoi kaaosta. Perustettu 1949, vahingossa.">
@@ -9,6 +10,11 @@
 <link rel="stylesheet" href="assets/base.css">
 </head>
 <body>
+<noscript><style>.theme-switch{display:none}</style></noscript>
+<div class="theme-switch" role="group" aria-label="Ulkoasu · Appearance">
+  <button type="button" data-theme-value="standard" aria-pressed="true">Vakiomuoto · Standard</button>
+  <button type="button" data-theme-value="agency" aria-pressed="false">Uusi ilme · New look</button>
+</div>
 <header class="masthead">
   <div class="container">
     <div class="masthead-row">
@@ -126,5 +132,6 @@
   </div>
 </footer>
 
+<script src="assets/theme-switch.js"></script>
 </body>
 </html>

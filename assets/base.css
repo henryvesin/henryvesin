@@ -21,12 +21,15 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-1);
   line-height: var(--leading-normal);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-sans);
-  font-weight: 700;
+  font-weight: var(--weight-heading);
   line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
+  text-transform: var(--heading-transform);
   margin: 0 0 var(--space-2);
 }
 
@@ -86,10 +89,16 @@ img, canvas, svg { max-width: 100%; }
   gap: var(--space-2);
 }
 
+.masthead-identity > div {
+  min-width: 0; /* let the title wrap/shrink instead of forcing flex overflow */
+}
+
 .masthead-name {
   font-size: var(--text-2);
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-weight: var(--weight-heading);
+  letter-spacing: var(--tracking-heading);
+  text-transform: var(--heading-transform);
+  overflow-wrap: anywhere;
 }
 
 .masthead-tagline {
@@ -222,7 +231,7 @@ img, canvas, svg { max-width: 100%; }
 .exhibit-frame {
   border: var(--rule-heavy);
   padding: var(--space-2);
-  background: #ffffff;
+  background: var(--color-vitrine);
   margin: var(--space-3) 0;
 }
 
@@ -230,7 +239,7 @@ img, canvas, svg { max-width: 100%; }
   display: block;
   width: 100%;
   height: auto;
-  background: #ffffff;
+  background: var(--color-vitrine);
 }
 
 .placard {
@@ -238,6 +247,124 @@ img, canvas, svg { max-width: 100%; }
   border-top: none;
   padding: var(--space-3);
   margin-top: calc(-1 * var(--space-3));
+}
+
+/* ---------- Appearance switch ---------- */
+
+.theme-switch {
+  position: fixed;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 100;
+  display: flex;
+  background: var(--color-paper);
+  border: var(--rule-heavy);
+  max-width: calc(100vw - 2 * var(--space-2));
+}
+
+.theme-switch button {
+  font-family: var(--font-mono);
+  font-size: var(--text--1);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.45em 0.65em;
+  border: none;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-switch button + button {
+  border-left: var(--rule-hairline);
+}
+
+.theme-switch button[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.theme-switch button:hover {
+  color: var(--color-accent-red);
+}
+
+.theme-switch button[aria-pressed="true"]:hover {
+  color: var(--color-paper);
+}
+
+.theme-switch button {
+  min-width: 0; /* flex items default to min-width:auto, which defeats white-space:normal below */
+}
+
+@media (max-width: 30rem) {
+  .theme-switch {
+    /* Fixed top-right doesn't leave room next to the huge agency
+       wordmark at this width — fall back to a normal top-of-page
+       block instead of floating over the title. */
+    position: static;
+    max-width: none;
+    width: 100%;
+    margin-bottom: var(--space-2);
+  }
+
+  .theme-switch button {
+    flex: 1;
+    text-align: center;
+    font-size: 0.7rem;
+    padding: 0.6em 0.5em;
+    white-space: normal;
+    line-height: 1.2;
+    max-width: none;
+  }
+}
+
+/* ---------- "Uusi ilme" (New look) theme-scoped overrides ----------
+   Everything above already reads tokens, so most of the look-change
+   happens in tokens.css. What's left here is the handful of rules
+   that need a genuinely different treatment, not just different
+   values, under data-theme="agency". */
+
+[data-theme="agency"] .masthead {
+  border-top-width: 6px;
+}
+
+[data-theme="agency"] .masthead-name {
+  font-size: var(--text-4);
+  line-height: 0.9;
+}
+
+[data-theme="agency"] .masthead-tagline {
+  font-style: normal;
+  text-transform: var(--heading-transform);
+  letter-spacing: 0.02em;
+}
+
+[data-theme="agency"] .site-nav ul {
+  gap: var(--space-4);
+  font-size: var(--text-1);
+  font-weight: var(--weight-heading);
+  text-transform: var(--heading-transform);
+}
+
+[data-theme="agency"] .site-nav a {
+  border-bottom-width: 2px;
+}
+
+[data-theme="agency"] a:hover {
+  color: var(--color-paper);
+  background: var(--color-ink);
+}
+
+[data-theme="agency"] .card,
+[data-theme="agency"] .exhibit-frame,
+[data-theme="agency"] .placard,
+[data-theme="agency"] .seal {
+  border-width: 2px;
+}
+
+[data-theme="agency"] .lang-tag {
+  border-width: 2px;
+  font-weight: 700;
 }
 
 /* ---------- Reduced motion ---------- */
