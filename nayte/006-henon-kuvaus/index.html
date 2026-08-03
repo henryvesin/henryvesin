@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fi" data-arc="2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 006 — Hénon-kuvaus — Kaaostoimisto</title>
+<meta name="description" content="Näyte 006: Hénon-kuvaus, diskreetti kaaosjärjestelmä jonka piste-pilvi paljastaa fraktaalirakenteen.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> II · Attraktorit · Attractors</p>
+  <p class="meta">Näyte 006 · Specimen 006</p>
+  <h1>Hénon-kuvaus · Hénon Map</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="henon-canvas" role="img"
+      aria-label="Hénon-kuvauksen piste-pilvi. Vedä hiirellä laatikko rajataksesi ja tarkentaaksesi alueeseen. Vaatii JavaScriptin. / The Hénon map's point cloud. Drag a box with the mouse to zoom into a region. Requires JavaScript."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Hallinta · Controls">
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-zoom-out">Loitonna · Zoom out</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta pisteiden kertymisen näkemiseksi. Vedä laatikko hiirellä tarkentaaksesi mihin tahansa alueeseen.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Hénon-kuvaus on kaksiulotteinen diskreetti järjestelmä: ei differentiaaliyhtälöä, vain toistuva sijoitus. Sama piste, iteroituna miljoonia kertoja, piirtää koko attraktorin — ja jokainen tarkennus paljastaa saman raidoitetun rakenteen uudessa mittakaavassa.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The Hénon map is a two-dimensional discrete system: no differential equation, just a repeated substitution. A single point, iterated millions of times, traces the whole attractor — and every zoom reveals the same banded structure at a new scale.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälö · Equation</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>1</mn><mo>−</mo><mi>a</mi><msubsup><mi>x</mi><mi>n</mi><mn>2</mn></msubsup><mo>+</mo><msub><mi>y</mi><mi>n</mi></msub></mtd></mtr>
+        <mtr><mtd><msub><mi>y</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>b</mi><msub><mi>x</mi><mi>n</mi></msub></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Parametrit: a=1,4, b=0,3 (klassiset kaoottiset arvot). Ei integrointia — suora iterointi. Näytöllä oleva pilvi koostuu yhdestä radasta, joka on ergodinen attraktorilla: yksi pitkä rata täyttää koko rakenteen.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Parameters: a=1.4, b=0.3 (classic chaotic values). No integration — direct iteration. The cloud on screen is a single orbit, ergodic on the attractor: one long orbit fills in the whole structure.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Tarkenna mihin tahansa "yhtenäiseltä" näyttävään viivaan: se paljastuu useaksi rinnakkaiseksi raidaksi, ja tarkennettuna edelleen — samaksi kuvioksi uudelleen.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Zoom into any line that looks "solid": it turns out to be several parallel bands, and zooming further reveals the same pattern again.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 006</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="henon.js"></script>
+</body>
+</html>

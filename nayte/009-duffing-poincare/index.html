@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fi" data-arc="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 009 — Duffing + Poincaré — Kaaostoimisto</title>
+<meta name="description" content="Näyte 009: pakotettu Duffing-värähtelijä ja sen Poincarén leikkaus.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> III · Reitit kaaokseen · Routes to chaos</p>
+  <p class="meta">Näyte 009 · Specimen 009</p>
+  <h1>Duffing + Poincaré</h1>
+
+  <div style="display:grid; grid-template-columns:1fr; gap:var(--space-2);">
+    <div>
+      <p class="meta">Vaiheavaruus · Phase space</p>
+      <div class="exhibit-frame">
+        <canvas id="phase-canvas" role="img" style="aspect-ratio:1/1;"
+          aria-label="Duffing-värähtelijän vaiherata (x, v). Vaatii JavaScriptin. / The Duffing oscillator's phase trajectory (x, v). Requires JavaScript."></canvas>
+      </div>
+    </div>
+    <div>
+      <p class="meta">Poincarén leikkaus · Poincaré section</p>
+      <div class="exhibit-frame">
+        <canvas id="poincare-canvas" role="img" style="aspect-ratio:1/1;"
+          aria-label="Poincarén leikkaus, näytteistetty kerran pakkojaksossa. Vaatii JavaScriptin. / The Poincaré section, sampled once per forcing period. Requires JavaScript."></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="8" step="0.1" value="4">
+      <span class="control-readout" id="ctrl-speed-readout">4.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta. Ensimmäiset 50 pakkojaksoa ohitetaan siirtymänä ennen piirtoa. Oikea kuva täyttyy pisteillä, kun jaksoja kertyy.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Duffingin värähtelijä on kaksoiskuoppainen jousi, jota pakotetaan jaksollisella voimalla. Vaiherata itsessään on sotkuinen; kun sitä näytteistetään täsmälleen kerran pakkojaksossa (Poincarén leikkaus), esiin piirtyy outo attraktori pistepilvenä.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The Duffing oscillator is a double-well spring driven by a periodic force. The phase trajectory itself is tangled; sampled exactly once per forcing period (the Poincaré section), a strange attractor emerges as a point cloud.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälö · Equation</h2>
+    <math display="block">
+      <mrow>
+        <mover><mi>x</mi><mo>¨</mo></mover>
+        <mo>+</mo><mi>δ</mi><mover><mi>x</mi><mo>˙</mo></mover>
+        <mo>−</mo><mi>x</mi><mo>+</mo><msup><mi>x</mi><mn>3</mn></msup>
+        <mo>=</mo><mi>γ</mi><mi>cos</mi><mrow><mo>(</mo><mi>ω</mi><mi>t</mi><mo>)</mo></mrow>
+      </mrow>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Parametrit: δ=0,2, γ=0,3, ω=1,0. Integrointi: RK4, dt = jakson/400 (täsmällinen alijako, jotta Poincarén näytteet osuvat tarkasti pakkojakson kohdalle). Mitattu: 300 näytteestä 234 osui erillisiin 0,05-kokoisiin koreihin siirtymän jälkeen — leviämä, ei muutama jaksollinen ryhmä, mikä vahvistaa kaaoksen.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Parameters: δ=0.2, γ=0.3, ω=1.0. Integrator: RK4, dt = period/400 (an exact subdivision, so Poincaré samples land precisely on the forcing period). Measured: 234 of 300 samples fell into distinct 0.05-wide buckets after the transient — a spread, not a few periodic clusters, confirming chaos.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Vasen kuva näyttää sotkun; oikea kuva näyttää järjestyksen sotkun sisällä — sama data, eri hetki otettuna.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>The left image shows a tangle; the right image shows the order inside the tangle — the same data, sampled at a different moment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 009</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="duffing.js"></script>
+</body>
+</html>

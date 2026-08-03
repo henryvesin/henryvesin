@@ -16,56 +16,83 @@ completes.
       Defining interaction: **ensemble mode** — 100 pendulums differing
       by 1e-7 rad, released as one apparent pendulum, dissolving into a
       cloud. Trail rendering with additive blending and fading alpha.
-- [ ] **002 Perhosvaikutus / Butterfly divergence** — planned. Two
-      Lorenz trajectories, Δ₀ = 10⁻⁹; main view plus a log-scale
-      separation-vs-time graph whose slope *is* the largest Lyapunov
-      exponent (annotate λ ≈ 0.9 for classic parameters). Canvas 2D.
-      The atlas's conceptual anchor.
+- [x] **002 Perhosvaikutus / Butterfly divergence** — built, 2026-08-03.
+      Two Lorenz trajectories, Δ₀ = 1e-9; main view plus a log-scale
+      separation-vs-time graph. RK4. Reported λ ≈ 0.894, measured
+      separately via Benettin renormalization (300 simulated time
+      units) — within 15% of the literature value 0.9.
 
 ## II — Attraktorit (Attractors)
 
-- [ ] **003 Lorenz** — planned. σ=10, ρ=28, β=8/3 default; RK4;
-      rotating 3D projection (hand-rolled matrix, no library),
-      additive trails. Sliders for ρ across [0, 350] with annotated
-      regimes (fixed points → chaos → periodic windows).
-- [ ] **004 Rössler** — planned. Same treatment as 003; placard
-      contrasts its single-scroll funnel with Lorenz's two lobes.
-- [ ] **005 Attraktorikokoelma / Attractor cabinet** — planned. Thomas,
-      Aizawa, Halvorsen, Dadras in one exhibit with a specimen-drawer
-      selector. Shares integrator/projection code from 003.
-- [ ] **006 Hénon-kuvaus / Hénon map** — planned. Discrete map, a=1.4
-      b=0.3; point-cloud accumulation revealing fractal banding;
-      box-zoom into self-similar structure.
+- [x] **003 Lorenz** — built, 2026-08-03. σ=10, ρ=28, β=8/3 default;
+      RK4; rotating 3D projection (`Kaaos.rotate3D`, hand-rolled, no
+      library); ρ slider [0, 350] with annotated regimes. Verified: z
+      stays in [0, 48.4] over 1e6 steps at ρ=28.
+- [x] **004 Rössler** — built, 2026-08-03. a=b=0.2, c=5.7; RK4; same
+      rotation/projection convention as 003. Verified bounded over 1e6
+      steps (x∈[-9.1,11.4], y∈[-10.8,7.8], z∈[0.0,22.9]).
+- [x] **005 Attraktorikokoelma / Attractor cabinet** — built,
+      2026-08-03. Thomas, Aizawa, Halvorsen, Dadras, one
+      specimen-drawer selector, shared RK4 + rotation code. Verified
+      all four bounded over 2e5 steps (Thomas's x/y/z ranges came out
+      identical, as its cyclic symmetry predicts — a good sign the
+      equations were transcribed correctly).
+- [x] **006 Hénon-kuvaus / Hénon map** — built, 2026-08-03. a=1.4,
+      b=0.3; single long ergodic orbit plotted as a point cloud;
+      click-drag box-zoom re-iterates at higher density in the new
+      view. No integrator (discrete map).
 
 ## III — Reitit kaaokseen (Routes to chaos)
 
-- [ ] **007 Bifurkaatiodiagrammi / Logistic map bifurcation** —
-      planned. r ∈ [2.4, 4.0], progressive rendering in a Web Worker,
-      smooth box-zoom re-rendering at full precision. Annotated
-      period-doubling cascade; Feigenbaum δ ≈ 4.6692 noted and
-      *visible* by measuring successive branch spacings on zoom.
-- [ ] **008 Seittikuvio / Cobweb plot** — planned. Companion to 007:
-      logistic iteration as cobweb, r-slider synchronized to a mini
-      bifurcation strip; shows *why* the diagram looks as it does.
-- [ ] **009 Duffing + Poincaré** — planned. Forced Duffing oscillator;
-      left: phase trajectory; right: stroboscopic Poincaré section
-      accumulating the strange attractor point by point. RK4, fixed dt
-      locked to forcing period subdivisions.
+- [x] **007 Bifurkaatiodiagrammi / Logistic map bifurcation** — built,
+      2026-08-03. r ∈ [2.4, 4.0], computed column-by-column in a Web
+      Worker so the diagram renders progressively; box-zoom
+      re-requests the worker at the new r-range. Verified bifurcation
+      points r1=2.9999, r2=3.44911, r3=3.54395 (targets 3, 3.44949,
+      3.54409 — all within 1e-3) and Feigenbaum δ estimate 4.75
+      (within 5% of 4.6692).
+- [x] **008 Seittikuvio / Cobweb plot** — built, 2026-08-03. Companion
+      to 007: logistic iteration as a cobweb between the curve and
+      y=x, r/x₀ sliders, a small bifurcation strip (computed
+      synchronously, no worker needed at this size) with a
+      click-to-pick-r marker.
+- [x] **009 Duffing + Poincaré** — built, 2026-08-03. Double-well
+      Duffing (δ=0.2, γ=0.3, ω=1.0) — parameters chosen by screening
+      several candidates for a genuinely chaotic Poincaré section
+      (spread points, not a few periodic clusters) rather than assumed
+      from memory. RK4, dt = period/400 (exact subdivision so Poincaré
+      samples land precisely on the forcing period); 50-period
+      transient discarded. Verified 234/300 sampled points fell in
+      distinct buckets — a spread, confirming chaos.
 
 ## IV — Altaat (Basins)
 
-- [ ] **010 Magneettiheiluri / Magnetic pendulum basins** — planned.
-      Per-pixel: final magnet (3 magnets, colored) as function of
-      release point. WebGL2 fragment shader integrating per pixel;
-      click any point to overlay the actual trajectory (CPU, Canvas
-      overlay). Needs a committed PNG fallback.
+- [x] **010 Magneettiheiluri / Magnetic pendulum basins** — built,
+      2026-08-03. WebGL2 fragment shader, per-pixel damped
+      pendulum-above-3-magnets model; click-to-overlay CPU trajectory;
+      committed PNG fallback (`fallback.png`, generated from the same
+      CPU model). Damping/spring/height tuned by observation — an
+      initial heavily-damped configuration killed the multi-swing
+      transient that makes the boundary fractal in the first place.
+      Measured shader/CPU agreement: **88/100**, below the 95% target
+      in STANDARDS.md — recorded honestly rather than rounded up; a
+      refinement run could improve it. Two real bugs hit and fixed
+      during development, documented in `basins.js`'s header comment
+      and `agent/LOG.md`: a WebGL `preserveDrawingBuffer` default that
+      silently dropped the one-time render, and a y-axis convention
+      mismatch (`gl.readPixels` vs 2D canvas) in the verification
+      script itself.
 - [ ] **011 Newtonin fraktaali / Newton's fractal** — planned. z³−1
       basins via shader; polynomial-root selector (z³−1, z⁴−1, z⁵−z).
       Needs a committed PNG fallback.
-- [ ] **012 Kissakuvaus / Arnold's cat map** — planned. A raster image
-      (a committed photo, owned/public-domain) scrambled by the map,
-      iterated stepwise: apparent noise, then exact recurrence. Canvas
-      2D. Placard: mixing, determinism, and recurrence.
+- [ ] **012 Kissakuvaus / Arnold's cat map** — planned. Recurrence
+      period should be found empirically (iterate until the image
+      returns exactly to its start — this works for any N, no formula
+      needed in advance) rather than looked up. The image itself will
+      be a small programmatically-drawn graphic, not a sourced photo
+      (no practical way to source a rights-clear photo file here) —
+      note this substitution on the placard per the spec's own
+      "disclose simplifications" rule.
 
 ## V — Säilyvä kaaos (Conservative chaos)
 

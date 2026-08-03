@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fi" data-arc="2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 003 — Lorenz — Kaaostoimisto</title>
+<meta name="description" content="Näyte 003: Lorenz-attraktori, klassinen outo attraktori säädettävällä ρ-parametrilla.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> II · Attraktorit · Attractors</p>
+  <p class="meta">Näyte 003 · Specimen 003</p>
+  <h1>Lorenz</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="lorenz-canvas" role="img"
+      aria-label="Lorenz-attraktori kolmiulotteisessa projektiossa, kääntyen hitaasti. Vaatii JavaScriptin. / The Lorenz attractor in a slowly rotating 3D projection. Requires JavaScript."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-rho">ρ</label>
+      <input type="range" id="ctrl-rho" min="0" max="350" step="0.5" value="28">
+      <span class="control-readout" id="ctrl-rho-readout">28.0</span>
+      <span class="meta" id="rho-regime">kaoottinen · chaotic</span>
+    </div>
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="4" step="0.1" value="1">
+      <span class="control-readout" id="ctrl-speed-readout">1.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta. ρ-liukusäädin vaihtaa hallintaa kiintopisteen, kahden kiintopisteen ja kaaoksen välillä.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Lorenzin attraktori on rajoittunut mutta ei koskaan toistuva: rata kiertää kahta "siipeä" arvaamattomasti loikkien niiden välillä. Se on outojen attraktoreiden arkkityyppi.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The Lorenz attractor is bounded but never repeats: the trajectory circles two "wings," jumping unpredictably between them. It's the archetype of a strange attractor.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälöt · Equations</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><mover><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mi>σ</mi><mrow><mo>(</mo><mi>y</mi><mo>−</mo><mi>x</mi><mo>)</mo></mrow></mtd></mtr>
+        <mtr><mtd><mover><mi>y</mi><mo>˙</mo></mover><mo>=</mo><mi>x</mi><mrow><mo>(</mo><mi>ρ</mi><mo>−</mo><mi>z</mi><mo>)</mo></mrow><mo>−</mo><mi>y</mi></mtd></mtr>
+        <mtr><mtd><mover><mi>z</mi><mo>˙</mo></mover><mo>=</mo><mi>x</mi><mi>y</mi><mo>−</mo><mi>β</mi><mi>z</mi></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Parametrit: σ=10, β=8/3, ρ säädettävissä. Integrointi: RK4, dt = 0,005. Mitattu: z pysyy välillä [0, 48,4] 10⁶ askeleen (5000 simuloidun aikayksikön) yli ρ=28:lla — vastaa kirjallisuuden arvoa z ∈ ~[0, 50].</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Parameters: σ=10, β=8/3, ρ adjustable. Integrator: RK4, dt = 0.005. Measured: z stays within [0, 48.4] over 1e6 steps (5000 simulated time units) at ρ=28 — matches the published z ∈ ~[0, 50] range.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>ρ &lt; 24,74:llä rata asettuu levolliseen kiintopisteeseen. Ylitettäessä tämä kynnys sama yhtälö alkaa tuottaa loputonta, ei-toistuvaa liikettä.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Below ρ = 24.74 the trajectory settles into a calm fixed point. Cross that threshold and the same equation starts producing endless, non-repeating motion.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 003</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="lorenz.js"></script>
+</body>
+</html>

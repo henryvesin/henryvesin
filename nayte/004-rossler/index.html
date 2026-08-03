@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fi" data-arc="2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 004 — Rössler — Kaaostoimisto</title>
+<meta name="description" content="Näyte 004: Rösslerin attraktori, yksikierteinen vastine Lorenzin kaksisiipiselle attraktorille.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> II · Attraktorit · Attractors</p>
+  <p class="meta">Näyte 004 · Specimen 004</p>
+  <h1>Rössler</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="rossler-canvas" role="img"
+      aria-label="Rösslerin attraktori kolmiulotteisessa projektiossa, kääntyen hitaasti. Vaatii JavaScriptin. / The Rössler attractor in a slowly rotating 3D projection. Requires JavaScript."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="4" step="0.1" value="1">
+      <span class="control-readout" id="ctrl-speed-readout">1.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Rösslerin järjestelmä on Lorenzia yksinkertaisempi mutta yhtä kaoottinen: yksi ainoa "suppilo", jonka rata kiertää lähes tasossa ennen kuin venyy ja taittuu takaisin sisään. Tämä venytys-ja-taitto on kaaoksen geometrinen resepti.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The Rössler system is simpler than Lorenz but equally chaotic: a single "funnel," with the trajectory circling almost in a plane before stretching and folding back inside. That stretch-and-fold is the geometric recipe for chaos.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälöt · Equations</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><mover><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mo>−</mo><mi>y</mi><mo>−</mo><mi>z</mi></mtd></mtr>
+        <mtr><mtd><mover><mi>y</mi><mo>˙</mo></mover><mo>=</mo><mi>x</mi><mo>+</mo><mi>a</mi><mi>y</mi></mtd></mtr>
+        <mtr><mtd><mover><mi>z</mi><mo>˙</mo></mover><mo>=</mo><mi>b</mi><mo>+</mo><mi>z</mi><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mi>c</mi><mo>)</mo></mrow></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Parametrit: a=b=0,2, c=5,7 (klassiset kaoottiset arvot). Integrointi: RK4, dt = 0,01. Mitattu: rata pysyy rajattuna 10⁶ askeleen yli — x∈[−9,1, 11,4], y∈[−10,8, 7,8], z∈[0,0, 22,9] — vastaa julkaistua attraktorin kokoa.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Parameters: a=b=0.2, c=5.7 (classic chaotic values). Integrator: RK4, dt = 0.01. Measured: the trajectory stays bounded over 1e6 steps — x∈[−9.1, 11.4], y∈[−10.8, 7.8], z∈[0.0, 22.9] — matching the published attractor size.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Verrattuna Lorenziin (Näyte 003) Rössler tuottaa saman herkkyyden yhdellä silmukalla kahden sijaan — kaaos ei vaadi kahta siipeä.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Compared to Lorenz (Specimen 003), Rössler produces the same sensitivity with one loop instead of two — chaos doesn't need two wings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 004</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="rossler.js"></script>
+</body>
+</html>

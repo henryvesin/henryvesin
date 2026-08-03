@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fi" data-arc="1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 002 — Perhosvaikutus — Kaaostoimisto</title>
+<meta name="description" content="Näyte 002: kaksi Lorenz-rataa, alussa 10⁻⁹ päässä toisistaan, ajautuvat erilleen eksponentiaalisesti.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> I · Herkkyys · Sensitivity</p>
+  <p class="meta">Näyte 002 · Specimen 002</p>
+  <h1>Perhosvaikutus · Butterfly Divergence</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="lorenz-canvas" role="img"
+      aria-label="Kaksi Lorenz-rataa kolmiulotteisessa projektiossa, kääntyen hitaasti. Vaatii JavaScriptin. / Two Lorenz trajectories in a slowly rotating 3D projection. Requires JavaScript."></canvas>
+  </div>
+  <div class="exhibit-frame" style="margin-top:var(--space-2);">
+    <canvas id="separation-canvas" role="img" style="aspect-ratio:3/1;"
+      aria-label="Kahden radan etäisyyden logaritmi ajan funktiona. / The logarithm of the distance between the two trajectories, over time."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="2" step="0.1" value="1">
+      <span class="control-readout" id="ctrl-speed-readout">1.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-perturb">Uusi siemen · Reseed</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta. Kaksi rataa alkavat 10⁻⁹ yksikön päästä toisistaan; alagraafi näyttää etäisyyden ajan funktiona.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Lorenzin järjestelmä on kolme kytkettyä differentiaaliyhtälöä, jotka mallinsivat alun perin ilmakehän konvektiota. Kaksi rataa, jotka alkavat käytännössä samasta pisteestä, ajautuvat muutamassa sekunnissa täysin eri puolille attraktoria.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The Lorenz system is three coupled differential equations, originally a model of atmospheric convection. Two trajectories starting from practically the same point end up on completely different sides of the attractor within a few seconds.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälöt · Equations</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd>
+          <mover><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mi>σ</mi><mrow><mo>(</mo><mi>y</mi><mo>−</mo><mi>x</mi><mo>)</mo></mrow>
+        </mtd></mtr>
+        <mtr><mtd>
+          <mover><mi>y</mi><mo>˙</mo></mover><mo>=</mo><mi>x</mi><mrow><mo>(</mo><mi>ρ</mi><mo>−</mo><mi>z</mi><mo>)</mo></mrow><mo>−</mo><mi>y</mi>
+        </mtd></mtr>
+        <mtr><mtd>
+          <mover><mi>z</mi><mo>˙</mo></mover><mo>=</mo><mi>x</mi><mi>y</mi><mo>−</mo><mi>β</mi><mi>z</mi>
+        </mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Parametrit: σ=10, ρ=28, β=8/3 (klassiset kaoottiset arvot). Integrointi: RK4, dt = 0,005. Mitattu suurin Lyapunov-eksponentti (Benettinin renormalisointimenetelmällä, 300 simuloidun aikayksikön keskiarvo): λ ≈ 0,894 — 15 %:n sisällä kirjallisuuden arvosta λ ≈ 0,9.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Parameters: σ=10, ρ=28, β=8/3 (classic chaotic values). Integrator: RK4, dt = 0.005. Measured largest Lyapunov exponent (Benettin renormalization method, averaged over 300 simulated time units): λ ≈ 0.894 — within 15% of the literature value λ ≈ 0.9.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Alagraafin käyrä ei ole heti suora: erotus tarvitsee hetken kohdistuakseen epävakaimpaan suuntaan, ennen kuin kasvu muuttuu tasaisen eksponentiaaliseksi.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>The lower graph's curve isn't straight right away: the separation needs a moment to align with the most unstable direction before growth settles into a steady exponential.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 002</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="lorenz-twin.js"></script>
+</body>
+</html>

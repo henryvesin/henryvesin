@@ -35,3 +35,31 @@ Append-only. One line per run: date, type, what was made.
   `agent/` files rewritten for the new project (`AGENT.md`,
   `CATALOGUE.md`, `STANDARDS.md`). Next run: Specimen (Näyte 002,
   rotation position 1 of specimen/specimen/refinement).
+- 2026-08-03 — manual (direct request, not an autonomous run — the
+  owner asked to build the whole remaining catalogue in one session
+  rather than one specimen per run) — built Näyte 002 through 010.
+  Added `Kaaos.rotate3D`, `Kaaos.compileGLProgram`, and
+  `Kaaos.drawFullscreenQuad` to `assets/sim.js` as they became
+  genuinely shared across the attractor and shader exhibits. Every
+  specimen's invariant was actually measured (numbers and method in
+  `agent/CATALOGUE.md` and on each placard), not asserted — in two
+  cases the first assumed number was wrong and got corrected after
+  verification: the Lyapunov exponent for 002 needed the Benettin
+  renormalization method (a naive single-shot fit underestimates it
+  due to an alignment transient), and 010's shader/CPU agreement was
+  reported as 88/100 after actually measuring it, not the 96/100
+  guessed initially — both corrections are recorded so a future run
+  doesn't repeat either mistake. 010 surfaced two real environment
+  bugs worth knowing about for any future WebGL exhibit (011 will hit
+  the same class of issue): a one-time-render WebGL canvas needs
+  `preserveDrawingBuffer: true` or the browser may clear it right
+  after presenting; and `gl.readPixels` uses OpenGL's bottom-up Y
+  convention, which is easy to double-flip against by mistake when
+  cross-checking against a top-down 2D canvas or CPU calculation.
+  011–014 remain planned. Stopped here (context/session boundary, not
+  a natural stopping point in the catalogue) — next up is Näyte 011
+  (Newton's fractal, same WebGL2-shader pattern as 010, so the two
+  bugs above apply directly), then 012, 013, 014, then final
+  integration (all `is-planned` grid cards gone, kartta cross-checked,
+  full self-check pass, one commit or a PR per the normal run
+  protocol).

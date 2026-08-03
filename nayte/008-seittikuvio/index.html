@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fi" data-arc="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 008 — Seittikuvio — Kaaostoimisto</title>
+<meta name="description" content="Näyte 008: seittikuvio, joka näyttää miksi logistisen kuvauksen bifurkaatiodiagrammi näyttää siltä miltä näyttää.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> III · Reitit kaaokseen · Routes to chaos</p>
+  <p class="meta">Näyte 008 · Specimen 008</p>
+  <h1>Seittikuvio · Cobweb Plot</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="cobweb-canvas" role="img" style="aspect-ratio:1/1;"
+      aria-label="Seittikuvio: logistisen kuvauksen iterointi käyrän ja y=x-suoran välillä. Vaatii JavaScriptin. / Cobweb plot: iteration of the logistic map between the curve and the y=x line. Requires JavaScript."></canvas>
+  </div>
+  <div class="exhibit-frame" style="margin-top:var(--space-2);">
+    <canvas id="strip-canvas" role="img" style="aspect-ratio:6/1;"
+      aria-label="Pieni bifurkaatiokaista, jota voi napauttaa r:n valitsemiseksi. / A small bifurcation strip; click to pick r."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Hallinta · Controls">
+    <div class="control">
+      <label for="ctrl-r">r</label>
+      <input type="range" id="ctrl-r" min="2.4" max="4.0" step="0.001" value="3.6">
+      <span class="control-readout" id="ctrl-r-readout">3.600</span>
+    </div>
+    <div class="control">
+      <label for="ctrl-x0">x₀</label>
+      <input type="range" id="ctrl-x0" min="0.01" max="0.99" step="0.01" value="0.2">
+      <span class="control-readout" id="ctrl-x0-readout">0.200</span>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Napauta alakaistaa valitaksesi r:n suoraan, tai käytä liukusäätimiä.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Seittikuvio on Näyte 007:n vastine mikroskoopin alla: se näyttää yhden r:n arvon iteroinnin askel askeleelta. Pystyviiva nostaa nykyisen arvon käyrälle, vaakaviiva heijastaa sen takaisin y=x-suoralle — toistuen.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The cobweb plot is Specimen 007 under a microscope: it shows one value of r iterated step by step. A vertical line lifts the current value onto the curve, a horizontal line reflects it back onto the y=x line — repeating.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Pienellä r:llä seitti kiertyy sisään yhteen pisteeseen. Suuremmalla se hyppii kahden, sitten neljän pisteen välillä — täsmälleen samat siirtymät, jotka näkyvät Näyte 007:n haarautumisina.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>At small r, the web spirals into a single point. At larger r, it hops between two points, then four — exactly the same transitions that show up as branchings in Specimen 007.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 008</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="cobweb.js"></script>
+</body>
+</html>

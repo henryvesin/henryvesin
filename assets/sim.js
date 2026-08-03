@@ -183,4 +183,67 @@ window.Kaaos = window.Kaaos || {};
   Kaaos.prefersReducedMotion = function () {
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   };
+
+  // ---- Hand-rolled 3D rotation (no library) ----
+  // Rotates a point around the X axis by ax, then the resulting frame
+  // around the Y axis by ay. Returns [x, y, z]; callers use x,y for an
+  // orthographic screen position and z for a depth cue (alpha/size).
+  // Shared by the attractor exhibits (Lorenz, Rössler, the attractor
+  // cabinet) so the projection convention is identical across all of
+  // them.
+  Kaaos.rotate3D = function (x, y, z, ax, ay) {
+    var cosA = Math.cos(ax), sinA = Math.sin(ax);
+    var y1 = y * cosA - z * sinA;
+    var z1 = y * sinA + z * cosA;
+    var cosB = Math.cos(ay), sinB = Math.sin(ay);
+    var x2 = x * cosB + z1 * sinB;
+    var z2 = -x * sinB + z1 * cosB;
+    return [x2, y1, z2];
+  };
+
+  // ---- Minimal WebGL2 program compile/link helper ----
+  // Shared by the two per-pixel shader exhibits (basins, Newton's
+  // fractal) so shader-error handling is written once. Returns
+  // {program, gl} on success, or null (with details in errors[]) on
+  // failure — callers use a failed compile as the WebGL2-unavailable
+  // signal and fall back to the committed PNG, same as an actually
+  // missing webgl2 context.
+  Kaaos.compileGLProgram = function (gl, vsSource, fsSource, errors) {
+    function compile(type, src) {
+      var sh = gl.createShader(type);
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        if (errors) errors.push(gl.getShaderInfoLog(sh));
+        gl.deleteShader(sh);
+        return null;
+      }
+      return sh;
+    }
+    var vs = compile(gl.VERTEX_SHADER, vsSource);
+    var fs = compile(gl.FRAGMENT_SHADER, fsSource);
+    if (!vs || !fs) return null;
+
+    var program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      if (errors) errors.push(gl.getProgramInfoLog(program));
+      return null;
+    }
+    return program;
+  };
+
+  // Binds a fullscreen quad (two triangles) to attribute location
+  // `aPosLoc` — every per-pixel shader exhibit needs exactly this.
+  Kaaos.drawFullscreenQuad = function (gl, aPosLoc) {
+    var quad = new Float32Array([-1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1]);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(aPosLoc);
+    gl.vertexAttribPointer(aPosLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  };
 })(window.Kaaos);

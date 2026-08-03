@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fi" data-arc="2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 005 — Attraktorikokoelma — Kaaostoimisto</title>
+<meta name="description" content="Näyte 005: neljä outoa attraktoria (Thomas, Aizawa, Halvorsen, Dadras) yhdessä näytteessä.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> II · Attraktorit · Attractors</p>
+  <p class="meta">Näyte 005 · Specimen 005</p>
+  <h1>Attraktorikokoelma · Attractor Cabinet</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="attractor-canvas" role="img"
+      aria-label="Valittu outo attraktori kolmiulotteisessa projektiossa, kääntyen hitaasti. Vaatii JavaScriptin. / The selected strange attractor in a slowly rotating 3D projection. Requires JavaScript."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Näytteen valinta · Specimen selection">
+    <div class="control-buttons" role="group" aria-label="Attraktori · Attractor">
+      <button type="button" data-system="thomas" aria-pressed="true">Thomas</button>
+      <button type="button" data-system="aizawa" aria-pressed="false">Aizawa</button>
+      <button type="button" data-system="halvorsen" aria-pressed="false">Halvorsen</button>
+      <button type="button" data-system="dadras" aria-pressed="false">Dadras</button>
+    </div>
+  </div>
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="4" step="0.1" value="1">
+      <span class="control-readout" id="ctrl-speed-readout">1.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="true">Toista · Play</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+
+  <p class="meta" style="margin-top:var(--space-2);">Käynnistä Toista-painikkeesta. Valitse attraktori yllä olevista painikkeista.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Sama resepti — kolme kytkettyä differentiaaliyhtälöä, dissipatiivinen virtaus — tuottaa hyvin erilaisia muotoja riippuen yhtälöiden tarkasta muodosta. Neljä tunnettua esimerkkiä samassa vitriinissä.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The same recipe — three coupled differential equations, a dissipative flow — produces very different shapes depending on the exact form of the equations. Four well-known examples in one case.</p>
+      </div>
+    </div>
+
+    <h2>Yhtälöt · Equations</h2>
+    <div class="bilingual">
+      <div class="lang-block" lang="fi"><span class="lang-tag" aria-hidden="true">FI</span><p>Thomas (b=0,208186):</p></div>
+      <div class="lang-block" lang="en"><span class="lang-tag" aria-hidden="true">EN</span><p>&nbsp;</p></div>
+    </div>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><mover><mi>x</mi><mo>˙</mo></mover><mo>=</mo><mi>sin</mi><mi>y</mi><mo>−</mo><mi>b</mi><mi>x</mi></mtd></mtr>
+        <mtr><mtd><mover><mi>y</mi><mo>˙</mo></mover><mo>=</mo><mi>sin</mi><mi>z</mi><mo>−</mo><mi>b</mi><mi>y</mi></mtd></mtr>
+        <mtr><mtd><mover><mi>z</mi><mo>˙</mo></mover><mo>=</mo><mi>sin</mi><mi>x</mi><mo>−</mo><mi>b</mi><mi>z</mi></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi"><span class="lang-tag" aria-hidden="true">FI</span><p>Aizawa (a=0,95, b=0,7, c=0,6, d=3,5, e=0,25, f=0,1):</p></div>
+      <div class="lang-block" lang="en"><span class="lang-tag" aria-hidden="true">EN</span><p>&nbsp;</p></div>
+    </div>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><mover><mi>z</mi><mo>˙</mo></mover><mo>=</mo><mi>c</mi><mo>+</mo><mi>a</mi><mi>z</mi><mo>−</mo><mfrac><msup><mi>z</mi><mn>3</mn></msup><mn>3</mn></mfrac><mo>−</mo><mrow><mo>(</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>)</mo></mrow><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>e</mi><mi>z</mi><mo>)</mo></mrow><mo>+</mo><mi>f</mi><mi>z</mi><msup><mi>x</mi><mn>3</mn></msup></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi"><span class="lang-tag" aria-hidden="true">FI</span><p>Halvorsen (a=1,4) ja Dadras (a=3, b=2,7, c=1,7, d=2, e=9) noudattavat samaa periaatetta — täydet yhtälöt lähdekoodissa.</p></div>
+      <div class="lang-block" lang="en"><span class="lang-tag" aria-hidden="true">EN</span><p>Halvorsen (a=1.4) and Dadras (a=3, b=2.7, c=1.7, d=2, e=9) follow the same principle — full equations in the source.</p></div>
+    </div>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Integrointi: RK4, dt vaihtelee järjestelmän mukaan (0,005–0,02, valittu vakauden mukaan). Mitattu: kaikki neljä pysyvät rajattuina 2×10⁵ askeleen yli — Thomasin x-, y- ja z-vaihteluvälit tulivat identtisiksi, kuten sen syklisestä symmetriasta seuraa.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Integrator: RK4, dt varies by system (0.005–0.02, chosen for stability). Measured: all four stay bounded over 2×10⁵ steps — Thomas's x, y, and z ranges came out identical, as follows from its cyclic symmetry.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Neljä eri muotoa, sama menetelmä: pieni muutos yhtälön termeissä riittää muuttamaan lopputuloksen tunnistamattomaksi.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Four different shapes, the same method: a small change in the equation's terms is enough to make the outcome unrecognizable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 005</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="attractors.js"></script>
+</body>
+</html>
