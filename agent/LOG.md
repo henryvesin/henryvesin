@@ -87,3 +87,22 @@ Append-only. One line per run: date, type, what was made.
   `index.html` grid card swapped from `is-planned`, `CATALOGUE.md`
   updated. Next up: 012 (Arnold's cat map), then 013, 014, then final
   integration.
+- 2026-08-03 — manual (direct request, continuing the same session;
+  owner said to stop waiting for a push after each specimen and push
+  everything once at the end) — built Näyte 012 (Arnold's cat map):
+  N=64 integer-lattice permutation, no floating point anywhere, so the
+  recurrence invariant is bit-exact rather than approximate. Found the
+  period empirically (matrix [[2,1],[1,1]] to successive powers mod 64
+  until the identity, per CATALOGUE.md's explicit instruction not to
+  look it up) — 48 — then verified separately in-browser by diffing
+  the actual pixel arrays: identical to the original at iteration 48,
+  and at no smaller iteration checked from 1 through 50. Image is a
+  small programmatically-drawn cat face (canvas primitives), disclosed
+  on the placard as a substitution for a sourced photo, per spec. Reused
+  `Kaaos.fixedTimestepLoop` for the Play control the same way Näyte
+  006 does (dt = seconds per map-iteration rather than a physics dt);
+  confirmed the shared pause-on-tab-hidden behavior actually fires
+  (observed the loop auto-pause when the browser tab used for testing
+  wasn't frontmost) rather than assuming the shared code path works.
+  `index.html` grid card and `CATALOGUE.md` updated. Next up: 013
+  (standard map), 014 (stadium billiard), then final integration.

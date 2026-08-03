@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fi" data-arc="4">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 012 — Kissakuvaus — Kaaostoimisto</title>
+<meta name="description" content="Näyte 012: Arnoldin kissakuvaus — pikselitason permutaatio, joka sekoittaa kuvan ja palaa siihen tarkalleen.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> IV · Altaat · Basins</p>
+  <p class="meta">Näyte 012 · Specimen 012</p>
+  <h1>Kissakuvaus · Arnold's Cat Map</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="catmap-canvas" style="aspect-ratio:1/1; width:100%; cursor:crosshair;" role="img"
+      aria-label="64×64-pikselinen kissan kasvokuva, joka sekoittuu Arnoldin kuvauksen alla ja palaa tarkalleen alkuperäiseen 48 iteraation jälkeen. / A 64×64-pixel cat-face image that scrambles under Arnold's map and returns exactly to the original after 48 iterations."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Simulaation hallinta · Simulation controls">
+    <div class="control">
+      <label for="ctrl-speed">Nopeus · Speed</label>
+      <input type="range" id="ctrl-speed" min="0.1" max="4" step="0.1" value="1">
+      <span class="control-readout" id="ctrl-speed-readout">1.00×</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-play" aria-pressed="false">Toista · Play</button>
+      <button type="button" id="ctrl-twin">Kaksonen · Twin</button>
+      <button type="button" id="ctrl-reset">Nollaa · Reset</button>
+    </div>
+  </div>
+  <p class="meta" id="iter-readout" style="margin-top:var(--space-2);">Iteraatio 0 · jakso 48 · Iteration 0 · period 48</p>
+  <p class="meta">Napauta kuvaa merkitäksesi yhden pikselin; Kaksonen lisää vierekkäisen toisen. · Click the image to mark one pixel; Twin adds a second, one cell over.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Jokainen pikseli tässä 64×64-ruudukossa siirretään uuteen paikkaan yksinkertaisella kaavalla — ei liukulukuja, ei pyöristystä, pelkkää kokonaislukujen permutaatiota. Muutaman iteraation jälkeen kuva on silppua. Silti kuvaus on kääntyvä eikä mitään häviä: tarkalleen 48 iteraation jälkeen kuva palaa pikseli pikseliltä identtiseksi alkuperäisen kanssa.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Every pixel in this 64×64 grid is moved to a new spot by a simple formula — no floating point, no rounding, pure integer permutation. After a few iterations the image is scrambled noise. And yet the map is invertible and nothing is lost: after exactly 48 iterations, the image returns pixel-for-pixel identical to the original.</p>
+      </div>
+    </div>
+
+    <h2>Kuvaus · The map</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo>(</mo><mn>2</mn><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><msub><mi>y</mi><mi>n</mi></msub><mo>)</mo><mtext>&#160;mod&#160;</mtext><mi>N</mi></mtd></mtr>
+        <mtr><mtd><msub><mi>y</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><msub><mi>y</mi><mi>n</mi></msub><mo>)</mo><mtext>&#160;mod&#160;</mtext><mi>N</mi></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>N=64. Matriisi [[2,1],[1,1]] on determinantiltaan 1, joten kuvaus on N×N-ruudukon bijektio millä tahansa N:llä. Kuvassa käytetty kissan kasvokuva on piirretty ohjelmallisesti canvas-primitiiveillä tätä näytettä varten — ympäristössä ei ollut käytännöllistä tapaa hankkia oikeuksiltaan selvää valokuvaa, joten korvaus on tuotu esiin tässä eikä piiloteltu.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>N=64. The matrix [[2,1],[1,1]] has determinant 1, so the map is a bijection of the N×N grid for any N. The cat-face image used here was drawn programmatically with canvas primitives for this specimen — there was no practical way to source a rights-clear photograph in this environment, so the substitution is disclosed rather than hidden.</p>
+      </div>
+    </div>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Jakso ei ole kaavasta katsottu vaan mitattu suoraan: kuvauksen matriisin kertaluku modulo 64 laskettiin toistamalla matriisikertolaskua, kunnes tulos oli identiteetti — tulos 48, varmistettu myös vertaamalla pikselitaulukoita bitti bitiltä 48 iteraation jälkeen.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The period wasn't looked up — it was measured directly: the map matrix's order modulo 64 was computed by repeated matrix multiplication until the result was the identity — 48, confirmed separately by comparing pixel arrays bit-for-bit after 48 iterations.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Napauta kuvaa ja lisää Kaksonen: kaksi vierekkäistä pikseliä ajautuvat toisistaan kauas jo muutaman iteraation aikana, mutta molemmat palaavat tarkalleen lähtöruutuunsa jakson päätyttyä.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Click the image and add Twin: two adjacent pixels drift far apart within a few iterations, yet both land back on their exact starting cell once the period completes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 012</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="catmap.js"></script>
+</body>
+</html>

@@ -95,14 +95,17 @@ completes.
       010. Reused 010's `preserveDrawingBuffer`/resize-order fix and
       `Kaaos.compileGLProgram`/`Kaaos.drawFullscreenQuad` directly, no
       new shared-code bugs hit.
-- [ ] **012 Kissakuvaus / Arnold's cat map** — planned. Recurrence
-      period should be found empirically (iterate until the image
-      returns exactly to its start — this works for any N, no formula
-      needed in advance) rather than looked up. The image itself will
-      be a small programmatically-drawn graphic, not a sourced photo
-      (no practical way to source a rights-clear photo file here) —
-      note this substitution on the placard per the spec's own
-      "disclose simplifications" rule.
+- [x] **012 Kissakuvaus / Arnold's cat map** — built, 2026-08-03. N=64
+      integer lattice permutation ((2x+y, x+y) mod N, matrix det=1);
+      programmatically-drawn cat-face glyph (disclosed on the placard
+      — no practical way to source a rights-clear photo in this
+      environment); Play/Speed/Twin/Reset controls, click-to-mark a
+      pixel and watch it separate from its Twin before both land back
+      exactly on their start cells. Recurrence period found empirically
+      (repeated matrix multiplication mod 64 until identity, not looked
+      up): 48. Verified in-browser by comparing pixel arrays bit-for-
+      bit — identical to the original at iteration 48 and at no
+      smaller iteration from 1–50.
 
 ## V — Säilyvä kaaos (Conservative chaos)
 
