@@ -109,10 +109,15 @@ completes.
 
 ## V — Säilyvä kaaos (Conservative chaos)
 
-- [ ] **013 Standardikuvaus / Standard map (kicked rotor)** — planned.
-      Phase portrait: click to seed orbits, K-slider sweeping KAM tori
-      → mixed phase space → global chaos. Canvas 2D, thousands of
-      iterates per seed.
+- [x] **013 Standardikuvaus / Standard map (kicked rotor)** — built,
+      2026-08-03. Chirikov standard map, click-to-seed phase portrait
+      (4000 iterates/seed), K-slider [0,5] auto-clearing on change
+      (old points are invalid at a new K), Twin button (seed+1e-6).
+      Verified against the shipped step function itself, 10⁵
+      iterates: K=0.5 regular seed (0.3,0.3) stayed within a p-band of
+      width 1.19 (under a fifth of the full 2π≈6.28 range — bounded,
+      on an invariant curve); the same seed and iteration count at
+      K=5 filled the full range, width 6.28.
 - [ ] **014 Stadion vs. ympyrä / Stadium billiard** — planned. Split
       view: circular billiard (integrable, caustics) vs stadium
       (chaotic); launch fans of near-identical rays in both

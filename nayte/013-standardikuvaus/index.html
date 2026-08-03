@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fi" data-arc="5">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 013 — Standardikuvaus — Kaaostoimisto</title>
+<meta name="description" content="Näyte 013: Chirikovin standardikuvaus (potkittu roottori) — KAM-torit hajoavat kaaokseksi K:n kasvaessa.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> V · Säilyvä kaaos · Conservative chaos</p>
+  <p class="meta">Näyte 013 · Specimen 013</p>
+  <h1>Standardikuvaus · Standard Map</h1>
+
+  <div class="exhibit-frame">
+    <canvas id="standard-canvas" style="aspect-ratio:1/1; width:100%; cursor:crosshair;" role="img"
+      aria-label="Chirikovin standardikuvauksen faasiavaruus. Napauta siementääksesi radan. / The Chirikov standard map's phase space. Click to seed an orbit."></canvas>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Parametri · Parameter">
+    <div class="control">
+      <label for="ctrl-k">K</label>
+      <input type="range" id="ctrl-k" min="0" max="5" step="0.01" value="0.5">
+      <span class="control-readout" id="ctrl-k-readout">K=0.50</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-twin">Kaksonen · Twin</button>
+      <button type="button" id="ctrl-clear">Tyhjennä · Clear</button>
+    </div>
+  </div>
+  <p class="meta" style="margin-top:var(--space-2);">Napauta faasiavaruutta siementääksesi radan; K:n muuttaminen tyhjentää kuvan, koska vanhat pisteet eivät enää päde uudella K:lla.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Roottori saa säännöllisin väliajoin potkun, jonka voimakkuus riippuu sen kulmasta; välissä se pyörii vapaasti. Näytteessä on vain tämä yksi kuva per potku — kulma ja liikemäärä juuri ennen seuraavaa potkua. Kun K on pieni, useimmat radat pysyvät suljetuilla käyrillä (KAM-toreilla). Kun K kasvaa, torit rikkoutuvat yksi kerrallaan resonanssien läheltä, kunnes lähes koko faasiavaruus on yhtä kaoottista merta.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>A rotor is kicked at regular intervals with a strength that depends on its angle, and spins freely in between. This specimen shows only that one snapshot per kick — angle and momentum right before the next kick. When K is small, most orbits stay on closed curves (KAM tori). As K grows, tori break up one at a time near resonances, until nearly the whole phase space is a single chaotic sea.</p>
+      </div>
+    </div>
+
+    <h2>Kuvaus · The map</h2>
+    <math display="block">
+      <mtable>
+        <mtr><mtd><msub><mi>p</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>p</mi><mi>n</mi></msub><mo>+</mo><mi>K</mi><mi>sin</mi><msub><mi>θ</mi><mi>n</mi></msub></mtd></mtr>
+        <mtr><mtd><msub><mi>θ</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>n</mi></msub><mo>+</mo><msub><mi>p</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub></mtd></mtr>
+      </mtable>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Sekä θ että p kierretään takaisin väliin [−π, π) joka askeleella. Kuvaus on Chirikovin standardikuvaus (potkittu roottori, Boris Chirikov 1979) — yksi tunnetuimmista säilyvän kaaoksen malleista. 4000 iteraatiota per siemen.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Both θ and p are wrapped back into [−π, π) every step. This is the Chirikov standard map (the kicked rotor, Boris Chirikov 1979) — one of the best-known models of conservative chaos. 4000 iterations per seed.</p>
+      </div>
+    </div>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Mitattu suoraan tämän näytteen omalla kuvausfunktiolla, 10⁵ iteraatiota: K=0,5:llä säännöllinen siemen (θ₀=0,3, p₀=0,3) pysyi kapealla p-kaistalla, leveys 1,19 — alle viidesosa koko välistä 2π≈6,28. Samalla iteraatiomäärällä K=5:llä sama alkuarvo täytti koko p-välin, leveys 6,28. Ero on mitattu, ei oletettu.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Measured directly with this specimen's own map function, 10⁵ iterations: at K=0.5 a regular seed (θ₀=0.3, p₀=0.3) stayed within a narrow p-band, width 1.19 — under a fifth of the full range 2π≈6.28. The same iteration count at K=5 with the same starting point filled the entire p-range, width 6.28. The difference is measured, not assumed.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Napauta jotain sileää käyrää pienellä K:lla ja lisää Kaksonen: kaksonen jää lähes samalle käyrälle. Kasvata K noin arvoon 2–3 ja kokeile samaa keskellä sotkuista aluetta — kaksonen hajoaa heti täysin toiseen paikkaan.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Click a smooth curve at a low K and add Twin: the twin lands almost exactly back on the same curve. Raise K to around 2–3 and try the same near the messy region — the twin scatters immediately to a completely different spot.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 013</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="standardmap.js"></script>
+</body>
+</html>

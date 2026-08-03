@@ -106,3 +106,19 @@ Append-only. One line per run: date, type, what was made.
   wasn't frontmost) rather than assuming the shared code path works.
   `index.html` grid card and `CATALOGUE.md` updated. Next up: 013
   (standard map), 014 (stadium billiard), then final integration.
+- 2026-08-03 — manual (direct request, same session) — built Näyte 013
+  (Chirikov standard map / kicked rotor): click-to-seed phase portrait,
+  K-slider [0,5], Twin button. K changes auto-clear the canvas — old
+  points were computed at the previous K and would silently mislabel
+  the picture otherwise. Verified the STANDARDS.md invariant against
+  this file's own step function (not a separate offline model): at
+  K=0.5 a regular seed (0.3,0.3) stayed within a p-band of width 1.19
+  over 10^5 iterates (under a fifth of the full 2π≈6.28 range), while
+  the identical seed and iteration count at K=5 filled the entire
+  range (width 6.28) — confirmed directly in-browser, matching an
+  independent offline check to 6 significant figures. Visually
+  confirmed the classic standard-map structure at both K values
+  (smooth KAM curves at K=0.5; a scattered chaotic sea with one
+  surviving stability island at K=2.5). `index.html` grid card and
+  `CATALOGUE.md` updated. Next up: 014 (stadium billiard), then final
+  integration.
