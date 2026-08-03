@@ -1,38 +1,52 @@
 /*
-  Kaaostoimisto — design tokens. Single source of visual truth.
-  Every page consumes these variables only; no page defines its own
-  colors or fonts. See agent/CANON.md for the rationale behind each
-  choice — this file is intentionally just values.
+  Kaaostoimisto — kaaoksen havaintoarkisto. Design tokens.
+  Single source of visual truth: dark-field observatory. Every page
+  consumes these variables only; no page defines its own colors or
+  fonts. See agent/CANON-equivalent notes in agent/SPEC.md §4 for the
+  rationale — this file is intentionally just values.
+
+  Typography is monospace-forward by design intent (§4): rather than
+  mix a display sans with monospace data, the whole site commits to
+  one monospace family, used boldly and hugely for headings and
+  normally for body/data. That single choice is what carries the
+  "big, bold" identity while staying true to the instrument-panel,
+  numerically-honest register the content demands.
 */
 
 :root {
-  /* Color — 5 accents/ink max, plus paper neutrals */
-  --color-paper: #f4f1ea;
-  --color-paper-raised: #eae6db;
-  --color-ink: #1a1a18;
-  --color-ink-soft: rgba(26, 26, 24, 0.7);
-  --color-accent-red: #b5342a;
-  --color-accent-blue: #4a5a66;
-  --color-rule: #c9c3b5;
-  --color-vitrine: #ffffff; /* exhibit display-case background — constant across themes */
+  /* Color — dark-field background + light chrome + 5 low-saturation
+     arc accents (one per section of the pedagogical arc, §3). */
+  --color-bg: #08090b;
+  --color-bg-raised: #131318;
+  --color-chrome: #e6e6e2;
+  --color-chrome-soft: #8d8f96;
+  --color-rule: #2a2c31;
 
-  /* Type */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Courier New", monospace;
+  --accent-arc-1: #d99a52; /* I   Herkkyys (sensitivity) */
+  --accent-arc-2: #4fb0b6; /* II  Attraktorit (attractors) */
+  --accent-arc-3: #9a7fd1; /* III Reitit kaaokseen (routes to chaos) */
+  --accent-arc-4: #6bb17a; /* IV  Altaat (basins) */
+  --accent-arc-5: #5f93c9; /* V   Säilyvä kaaos (conservative chaos) */
+
+  /* Current-page accent — each exhibit/arc page sets this once,
+     everything else (trails, focus rings, active controls) reads it. */
+  --accent: var(--accent-arc-1);
+
+  /* Type — one family, monospace-forward throughout */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", "Courier New", monospace;
 
   --text--1: 0.75rem;
   --text-0: 0.875rem;
   --text-1: 1rem;
   --text-2: 1.25rem;
-  --text-3: 1.5rem;
-  --text-4: 2rem;
-  --text-5: 3rem;
+  --text-3: 1.75rem;
+  --text-4: clamp(2.25rem, 5vw, 4rem);
+  --text-5: clamp(2.75rem, 8vw, 6.5rem);
 
-  --leading-tight: 1.2;
-  --leading-normal: 1.55;
+  --leading-tight: 1.05;
+  --leading-normal: 1.6;
   --weight-heading: 700;
-  --tracking-heading: 0em;
-  --heading-transform: none;
+  --tracking-heading: -0.02em;
 
   /* Spacing — 8px grid */
   --space-1: 0.5rem;
@@ -45,43 +59,16 @@
 
   /* Structure */
   --rule-hairline: 1px solid var(--color-rule);
-  --rule-heavy: 3px solid var(--color-ink);
-  --radius: 0; /* deliberate: stamped-paper severity, no soft corners on UI chrome.
-                  The one exception is the circular agency seal mark, which is a
-                  graphic stamp motif, not a UI element — see .seal in base.css. */
-  --focus-ring: 2px solid var(--color-accent-blue);
+  --rule-heavy: 2px solid var(--color-chrome);
+  --radius: 0; /* instrument-panel severity: sharp corners throughout,
+                  no decorative exceptions this time. */
+  --focus-ring: 2px solid var(--accent);
   --focus-ring-offset: 2px;
 
-  --container-max: 68rem;
-}
+  --container-max: 74rem;
 
-/*
-  "Uusi ilme" (New look) — the mandatory-rebrand alternate appearance.
-  Toggled via the .theme-switch control (assets/theme-switch.js), which
-  sets data-theme="agency" on <html>. Overrides token *values* only —
-  every component still reads the same variable names, so base.css
-  needs no per-theme branching beyond a handful of scale/weight rules.
-  See agent/CANON.md for the rationale.
-*/
-:root[data-theme="agency"] {
-  --color-paper: #000000;
-  --color-paper-raised: #111111;
-  --color-ink: #ffffff;
-  --color-ink-soft: rgba(255, 255, 255, 0.72);
-  --color-accent-red: #ff4433;
-  --color-accent-blue: #8fd0ff;
-  --color-rule: rgba(255, 255, 255, 0.35);
-
-  --text--1: 0.8rem;
-  --text-0: 1rem;
-  --text-1: 1.15rem;
-  --text-2: clamp(1.5rem, 4vw, 2.5rem);
-  --text-3: clamp(1.75rem, 6vw, 4rem);
-  --text-4: clamp(2rem, 9vw, 6.5rem);
-  --text-5: clamp(2.5rem, 12vw, 9rem);
-
-  --leading-tight: 0.95;
-  --weight-heading: 800;
-  --tracking-heading: -0.03em;
-  --heading-transform: uppercase;
+  /* Control-strip (sliders, buttons, readouts share one look, §4) */
+  --control-bg: var(--color-bg-raised);
+  --control-border: var(--rule-hairline);
+  --control-track: #1c1e22;
 }

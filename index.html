@@ -2,136 +2,102 @@
 <html lang="fi">
 <head>
 <meta charset="utf-8">
-<script>(function(){try{if(localStorage.getItem("kaaos-theme")==="agency"){document.documentElement.setAttribute("data-theme","agency");}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kaaostoimisto — Etusivu / Front desk</title>
-<meta name="description" content="Kaaostoimisto hallinnoi kaaosta. Perustettu 1949, vahingossa.">
+<title>Kaaostoimisto — kaaoksen havaintoarkisto</title>
+<meta name="description" content="Numeerisesti tarkka atlas kaoottisista järjestelmistä: Lorenz, kaksoisheiluri, bifurkaatiot, altaat.">
 <link rel="stylesheet" href="assets/tokens.css">
 <link rel="stylesheet" href="assets/base.css">
 </head>
 <body>
-<noscript><style>.theme-switch{display:none}</style></noscript>
-<div class="theme-switch" role="group" aria-label="Ulkoasu · Appearance">
-  <button type="button" data-theme-value="standard" aria-pressed="true">Vakiomuoto · Standard</button>
-  <button type="button" data-theme-value="agency" aria-pressed="false">Uusi ilme · New look</button>
-</div>
 <header class="masthead">
   <div class="container">
     <div class="masthead-row">
       <div class="masthead-identity">
-        <span class="seal" aria-hidden="true">KT</span>
-        <div>
-          <div class="masthead-name">Kaaostoimisto</div>
-          <div class="masthead-tagline">Kaaos ei katoa. Se hallinnoidaan.</div>
-        </div>
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
       </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="index.html" aria-current="page">Atlas</a></li>
+          <li><a href="kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav class="site-nav" aria-label="Päävalikko / Main navigation">
-      <ul>
-        <li><a href="index.html" aria-current="page">Etusivu · Front desk</a></li>
-        <li><a href="osastot/index.html">Osastot · Departments</a></li>
-        <li><a href="nayttely/index.html">Näyttely · Exhibits</a></li>
-        <li><a href="tiedotteet/index.html">Tiedotteet · Bulletins</a></li>
-      </ul>
-    </nav>
   </div>
 </header>
 
 <main class="container">
-
-  <section aria-labelledby="mandaatti-otsikko">
-    <h1 id="mandaatti-otsikko">Kaaostoimisto</h1>
-    <div class="bilingual">
-      <div class="lang-block" lang="fi">
-        <span class="lang-tag" aria-hidden="true">FI</span>
-        <p>Kaaostoimisto perustettiin vuonna 1949, vahingossa. Sen tehtävänä on kaaoksen hallinnollinen ylläpito: luokittelu, arkistointi ja tarvittaessa jakelu.</p>
-      </div>
-      <div class="lang-block" lang="en">
-        <span class="lang-tag" aria-hidden="true">EN</span>
-        <p>Kaaostoimisto was established in 1949, by accident. Its mandate is the administrative maintenance of chaos: classification, archiving, and distribution where required.</p>
-      </div>
+  <div class="bilingual">
+    <div class="lang-block" lang="fi">
+      <span class="lang-tag" aria-hidden="true">FI</span>
+      <p>Numeerisesti tarkka atlas kaoottisista järjestelmistä. Jokainen näyte on todellinen, vuorovaikutteinen simulaatio — ei kuvitusta — ja sen matemaattinen esitys vastaa suoraan ajettavaa koodia.</p>
     </div>
-    <p class="meta">Kaaos ei katoa. Se hallinnoidaan. — Chaos does not disappear. It is administered.</p>
-  </section>
-
-  <hr class="letterhead-rule">
-
-  <section aria-labelledby="aukiolo-otsikko">
-    <h2 id="aukiolo-otsikko">Aukioloajat · Opening hours</h2>
-    <div class="bilingual">
-      <div class="lang-block" lang="fi">
-        <span class="lang-tag" aria-hidden="true">FI</span>
-        <p>Avoinna ma–pe 9:00–9:07. Poikkeukset ilmoitetaan poikkeuksellisesti, yleensä liian myöhään.</p>
-      </div>
-      <div class="lang-block" lang="en">
-        <span class="lang-tag" aria-hidden="true">EN</span>
-        <p>Open Mon–Fri 9:00–9:07. Exceptions are announced exceptionally, usually too late.</p>
-      </div>
+    <div class="lang-block" lang="en">
+      <span class="lang-tag" aria-hidden="true">EN</span>
+      <p>A numerically honest atlas of chaotic systems. Every specimen is a real, interactive simulation — not an illustration — and its stated mathematics matches the code that actually runs.</p>
     </div>
-  </section>
+  </div>
+  <p class="meta">Kokoelma on rajattu 14 näytteeseen · The collection is capped at 14 specimens — <a href="kartta/index.html">katso kartta · see the map</a></p>
 
   <hr class="section-rule">
 
-  <section aria-labelledby="osastot-otsikko">
-    <h2 id="osastot-otsikko">Osastot · Departments</h2>
-    <div class="bilingual">
-      <div class="lang-block" lang="fi">
-        <span class="lang-tag" aria-hidden="true">FI</span>
-        <p>Toimisto koostuu osastoista, joista jokainen vastaa kaaoksen yhdestä osa-alueesta.</p>
-      </div>
-      <div class="lang-block" lang="en">
-        <span class="lang-tag" aria-hidden="true">EN</span>
-        <p>The office consists of departments, each responsible for one facet of chaos.</p>
-      </div>
-    </div>
-    <div class="card-grid">
-      <a class="card" href="osastot/sattumavarasto/index.html" style="text-decoration:none; color:inherit;">
-        <div class="meta">Osasto · Department</div>
-        <h3>Sattumavarasto</h3>
-        <p lang="fi">Varastoi vaatimattomat sattumat niiden odottaessa käsittelyä tai huutokauppaa.</p>
-        <p lang="en">Stores modest coincidences while they await processing or auction.</p>
-      </a>
-    </div>
-    <p><a href="osastot/index.html">Kaikki osastot · All departments →</a></p>
-  </section>
-
-  <hr class="section-rule">
-
-  <section aria-labelledby="nayttely-otsikko">
-    <h2 id="nayttely-otsikko">Näyttely · Exhibits</h2>
-    <div class="card-grid">
-      <a class="card" href="nayttely/kaksoisheiluri/index.html" style="text-decoration:none; color:inherit;">
-        <div class="meta">Näyte 001 · Specimen 001</div>
+  <section data-arc="1" aria-labelledby="arc-1-heading">
+    <p class="arc-tag" id="arc-1-heading"><span class="arc-dot" aria-hidden="true"></span> I · Herkkyys · Sensitivity</p>
+    <div class="specimen-grid">
+      <a class="specimen-card" href="nayte/001-kaksoisheiluri/index.html">
+        <div class="specimen-number">Näyte 001</div>
         <h3>Kaksoisheiluri</h3>
-        <p lang="fi">Heiluri kahdella nivelellä, tarkkailtavana.</p>
-        <p lang="en">A pendulum with two joints, under observation.</p>
+        <p>Double Pendulum</p>
       </a>
+      <div class="specimen-card is-planned">
+        <div class="specimen-number meta-status">Näyte 002</div>
+        <h3>Perhosvaikutus</h3>
+        <p>Butterfly divergence</p>
+      </div>
     </div>
-    <p><a href="nayttely/index.html">Koko näyttely · Full exhibition →</a></p>
   </section>
 
-  <hr class="section-rule">
-
-  <section aria-labelledby="tiedotteet-otsikko">
-    <h2 id="tiedotteet-otsikko">Uusin tiedote · Latest bulletin</h2>
-    <div class="card">
-      <div class="meta">2026-08-01 · Tiedote 1/2026</div>
-      <h3><a href="tiedotteet/2026-08-01-arkisto-avautuu.html">Arkisto avautuu yleisölle · The archive opens to the public</a></h3>
-      <p lang="fi">Käsittely on kestänyt 77 vuotta, mikä alittaa toimiston oman tavoiteajan niukasti.</p>
-      <p lang="en">Processing took 77 years, narrowly beating the office's own target.</p>
+  <section data-arc="2" aria-labelledby="arc-2-heading">
+    <p class="arc-tag" id="arc-2-heading"><span class="arc-dot" aria-hidden="true"></span> II · Attraktorit · Attractors</p>
+    <div class="specimen-grid">
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 003</div><h3>Lorenz</h3><p>Lorenz attractor</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 004</div><h3>Rössler</h3><p>Rössler attractor</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 005</div><h3>Attraktorikokoelma</h3><p>Attractor cabinet</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 006</div><h3>Hénon-kuvaus</h3><p>Hénon map</p></div>
     </div>
-    <p><a href="tiedotteet/index.html">Kaikki tiedotteet · All bulletins →</a></p>
   </section>
 
+  <section data-arc="3" aria-labelledby="arc-3-heading">
+    <p class="arc-tag" id="arc-3-heading"><span class="arc-dot" aria-hidden="true"></span> III · Reitit kaaokseen · Routes to chaos</p>
+    <div class="specimen-grid">
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 007</div><h3>Bifurkaatiodiagrammi</h3><p>Logistic map bifurcation</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 008</div><h3>Seittikuvio</h3><p>Cobweb plot</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 009</div><h3>Duffing + Poincaré</h3><p>Duffing oscillator + Poincaré section</p></div>
+    </div>
+  </section>
+
+  <section data-arc="4" aria-labelledby="arc-4-heading">
+    <p class="arc-tag" id="arc-4-heading"><span class="arc-dot" aria-hidden="true"></span> IV · Altaat · Basins</p>
+    <div class="specimen-grid">
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 010</div><h3>Magneettiheiluri</h3><p>Magnetic pendulum basins</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 011</div><h3>Newtonin fraktaali</h3><p>Newton's fractal</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 012</div><h3>Kissakuvaus</h3><p>Arnold's cat map</p></div>
+    </div>
+  </section>
+
+  <section data-arc="5" aria-labelledby="arc-5-heading">
+    <p class="arc-tag" id="arc-5-heading"><span class="arc-dot" aria-hidden="true"></span> V · Säilyvä kaaos · Conservative chaos</p>
+    <div class="specimen-grid">
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 013</div><h3>Standardikuvaus</h3><p>Standard map (kicked rotor)</p></div>
+      <div class="specimen-card is-planned"><div class="specimen-number meta-status">Näyte 014</div><h3>Stadion vs. ympyrä</h3><p>Stadium vs. circle billiard</p></div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="container">
-    <p>Kaaostoimisto · perustettu 1949, vahingossa · Established 1949, by accident</p>
-    <p>Kaaos ei katoa. Se hallinnoidaan. · Chaos does not disappear. It is administered.</p>
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto</p>
   </div>
 </footer>
-
-<script src="assets/theme-switch.js"></script>
 </body>
 </html>

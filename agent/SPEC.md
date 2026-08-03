@@ -1,181 +1,195 @@
-# KAAOSTOIMISTO.FI — System Specification
+# KAAOSTOIMISTO.FI — Chaos Atlas Specification
 
-*Specification for Claude Code. Build this system in full. The human reviews via pull requests only.*
+*Specification for Claude Code. Build this system in full. The human reviews via pull requests only. This replaces the satirical-agency concept; architecture and operating model are inherited from the previous spec, content and quality standards are new.*
 
 ---
 
 ## 1. What this is
 
-**Kaaostoimisto** ("The Chaos Office") is a satirical, self-growing website at `kaaostoimisto.fi`. It presents itself as a deadpan Finnish government-adjacent agency responsible for the administration of chaos. The site is static, visually rich, and full of client-side interactive toys. **No user input ever reaches an AI. No backend exists.**
+**Kaaostoimisto — kaaoksen havaintoarkisto** ("observation archive of chaos") is a static, visually striking atlas of chaotic systems at `kaaostoimisto.fi`. Each exhibit is a real, interactive, numerically honest simulation of a canonical chaotic system — Lorenz attractor, double pendulum, bifurcation diagrams, fractal basins — rendered with Canvas/WebGL, accompanied by a short, correct explanation of the mathematics.
 
-The site grows over time: an agent (Claude Code, invoked locally by the owner) periodically adds one new piece of content per run, opens a pull request, and the owner merges it after a glance. That is the entire operational model.
+This is **not** a joke site and **not** a physics course. It is a gallery: each system presented as a *specimen*, with a number, a calm placard, and an interaction that makes the defining property of chaos — sensitive dependence on initial conditions — directly visible.
+
+The site is grown by an agent (Claude Code, invoked locally via `run.sh`), one exhibit per run, delivered as pull requests the owner merges after review. **No backend. No user data. No third-party requests.**
 
 Design intent, in priority order:
 
-1. **Zero maintenance.** Static files on GitHub Pages. Nothing to patch, monitor, or restart.
-2. **Coherence over volume.** One good artifact per run. The site must still look like one designer made it after 50 runs.
-3. **Deadpan, not zany.** The humor is bureaucratic seriousness applied to chaos. Never wacky, never random-for-random's-sake in the *copy* (the *visuals* may be chaotic — that is the joke: perfect order describing disorder).
-4. **The owner spends ≤1 minute per run**: trigger the script, later glance at the PR diff, merge.
+1. **Correct.** The mathematics shown matches the code running. Integrators are appropriate to the system. Known invariants are verified (§7). A beautiful wrong simulation is a defect.
+2. **The chaos must be *felt*.** Every exhibit includes at least one interaction demonstrating sensitivity: twin trajectories, perturbation on click, ensemble dissolution. Passive animation alone is insufficient.
+3. **Zero maintenance.** Static files, GitHub Pages, no build step, no dependencies, no framework, no CDN.
+4. **Finite scope.** The catalogue targets ~14 specimens (§6), then shifts permanently to refinement. This site converges to *done*.
 
 ---
 
 ## 2. Architecture
 
-```
-Owner's machine                      GitHub                   Visitor
-┌──────────────────┐    PR    ┌─────────────────┐   HTTPS   ┌─────────┐
-│ run.sh           │ ───────▶ │ repo            │ ────────▶ │ Browser │
-│  └─ claude -p    │          │  └─ Pages build │           │ (all JS │
-│     (this spec + │          │     on merge    │           │ is here)│
-│      AGENT.md)   │          └─────────────────┘           └─────────┘
-└──────────────────┘          DNS: Cloudflare → GitHub Pages IPs
-```
+Identical to the previous spec's operating model; differences only where noted.
 
-- **Hosting:** GitHub Pages, custom domain `kaaostoimisto.fi`, HTTPS enforced. `CNAME` file in repo root.
-- **Build:** none, or at most a zero-dependency static generator. **Default: plain HTML/CSS/JS, no framework, no npm build step.** Pages serves the repo as-is. This removes an entire failure class (broken builds, dependency rot). If a build step is ever truly needed, justify it in the PR description first.
-- **Agent runtime:** Claude Code in headless mode (`claude -p`), invoked by `run.sh`. It reads the repo, generates one artifact according to §5, self-checks per §7, commits to a branch, opens a PR with `gh`.
-- **No CI/CD logic beyond Pages' own deploy.** No Actions workflows unless later added for link-checking (optional, §7).
+- **Hosting:** GitHub Pages, custom domain `kaaostoimisto.fi` (`CNAME` file), HTTPS enforced, Cloudflare DNS with A records to GitHub Pages IPs.
+- **Stack:** plain HTML/CSS/JS. No npm, no build step, no frameworks, no external libraries — including no three.js and no KaTeX. Rendering:
+  - **Canvas 2D** — default. Trajectories, pendulums, maps, diagrams.
+  - **WebGL2, raw** — permitted *only* for per-pixel exhibits (basins of attraction, escape-time fractals) where every pixel is an independent computation. Shaders live inline in the exhibit's own file. If WebGL2 is unavailable, the exhibit shows a static pre-rendered PNG fallback (committed to the repo) with a note.
+  - **Web Workers** — permitted for heavy CPU computation that would block the UI (progressive bifurcation rendering). Same-file or sibling-file worker, no external scripts.
+  - **Mathematics display: native MathML.** Supported in all current browsers, zero dependencies. No LaTeX libraries.
+- **Agent runtime:** `run.sh` → `claude -p` → reads `agent/AGENT.md` → performs one run → self-check → branch → PR via `gh`. Main is never pushed directly.
 
 ### Repository layout
 
 ```
 /
-├── CNAME                      # kaaostoimisto.fi
-├── index.html                 # Front desk (landing page)
+├── CNAME
+├── index.html                  # Atlas front page: specimen grid + arc navigation
 ├── assets/
-│   ├── tokens.css             # Design tokens — single source of visual truth
-│   ├── base.css               # Layout, typography, components
-│   └── shared.js              # Tiny shared utilities (nav injection, i18n toggle)
-├── osastot/                   # "Departments" — one dir per department
-│   └── <slug>/index.html
-├── nayttely/                  # "Exhibits" — interactive chaos toys, one dir each
-│   └── <slug>/index.html      #   toy JS lives inline or as sibling file
-├── tiedotteet/                # "Bulletins" — memos, one HTML file each, dated
-│   ├── index.html             # Bulletin archive listing
-│   └── YYYY-MM-DD-<slug>.html
+│   ├── tokens.css              # Design tokens — single source of visual truth
+│   ├── base.css                # Layout, typography, placard & control components
+│   └── sim.js                  # Shared numerics: RK4, symplectic steppers, seeded RNG,
+│                               #   fixed-timestep loop, DPR-aware canvas setup, pause-on-hidden
+├── nayte/                      # Exhibits, one dir per specimen
+│   └── NNN-<slug>/index.html   #   sim code inline or as sibling .js; shaders inline
+│   └── NNN-<slug>/fallback.png #   only for WebGL exhibits
+├── kartta/index.html           # "The map": one page explaining the conceptual arc (§3)
 ├── agent/
-│   ├── AGENT.md               # Standing prompt / operating manual (the agent's own instructions)
-│   ├── CANON.md               # Fictional-universe facts. Append-only. Read every run.
-│   ├── BACKLOG.md             # Idea queue. Agent picks from top, may append new ideas at bottom.
-│   └── LOG.md                 # One line per run: date, type, what was made. Append-only.
-└── README.md                  # For humans: what this repo is, how to run the agent
+│   ├── AGENT.md                # Condensed operating manual (written at bootstrap from this spec)
+│   ├── CATALOGUE.md            # The specimen list with status: planned / built / refined
+│   ├── STANDARDS.md            # Numerical standards & invariant table (from §7) — checked every run
+│   └── LOG.md                  # One line per run, append-only
+└── README.md                   # Owner-facing: run.sh usage, DNS/Pages checklist
 ```
+
+`sim.js` exists because integrators and the timestep loop are the highest-risk code and must be written once, tested once, and reused — not re-derived per exhibit.
 
 ---
 
-## 3. The fiction (content concept)
+## 3. Content concept and pedagogical arc
 
-Kaaostoimisto is a straight-faced institution. Established "1949, by accident." Its mandate: *"Kaaos ei katoa. Se hallinnoidaan."* ("Chaos does not disappear. It is administered.")
+The atlas is ordered as a quiet progression. Navigation presents specimens in arc order; each placard states, in two or three sentences per language, (a) what the system is, (b) what to do, (c) what to notice. Finnish primary, English secondary, same fixed pattern on every page.
 
-**Tone rules (binding):**
-- Copy reads like a Finnish public agency: forms, decrees, opening hours, complaint procedures. Terse. Passive voice welcome.
-- The agency never acknowledges being a joke. No winking at the reader.
-- Bilingual: Finnish primary, English secondary. Every page carries both (simple toggle or side-by-side; agent picks one pattern in run 1 and keeps it forever — record the choice in CANON.md).
-- Humor emerges from applying administrative precision to absurd subject matter. Example register: *"Tiedoksianto: satunnaisuuden kausivaihtelu on tänä vuonna 4,2 % odotettua satunnaisempaa."*
-- Never reference real people, real companies, real politics, or current events. The agency exists outside time.
+**The arc:**
 
-**Canonical structure of the institution** (seed for CANON.md; agent may extend, never contradict):
-- **Front desk** (`index.html`): agency identity, mandate, opening hours ("Ma–Pe 9:00–9:07"), directory of departments, latest bulletin, featured exhibit.
-- **Departments (Osastot):** each has a name, a mandate paragraph, a form number, and one embedded visual element. Seed ideas live in BACKLOG.md (§6).
-- **Exhibits (Näyttely):** the public gallery of "chaos specimens under administration" — the interactive toys. Each exhibit page: specimen number, deadpan curatorial placard text, and the interactive visual itself.
-- **Bulletins (Tiedotteet):** dated official announcements. Short (150–300 words per language). The archive is the site's changelog in disguise.
+1. **Herkkyys (Sensitivity)** — chaos as divergence of nearby states. The entry experience.
+2. **Attraktorit (Attractors)** — bounded motion that never repeats; strange attractors as the shape of chaos.
+3. **Reitit kaaokseen (Routes to chaos)** — period doubling, bifurcation; order and chaos interleaved in parameter space.
+4. **Altaat (Basins)** — deterministic outcomes with fractal boundaries; unpredictability without noise.
+5. **Säilyvä kaaos (Conservative chaos)** — chaos without attractors; mixed phase space, KAM islands.
+
+**Placard register:** precise, spare, museum-neutral. Specimen numbers (Näyte 001…) and the faint institutional flavor of the domain name are retained as *aesthetic*, not as fiction — no invented agency lore, no jokes, no fourth wall to break. Real science, real names (Lorenz, Hénon, Feigenbaum), correct attributions.
+
+Every placard ends with one line under the heading **"Havainto"** (Observation): the single most important thing the visitor should witness — e.g. *"Kaksi rataa, alussa 10⁻⁹ päässä toisistaan, ovat 30 sekunnin kuluttua eri puolilla attraktoria."*
 
 ---
 
 ## 4. Visual design system
 
-Established once, in the bootstrap run, then **enforced forever via `tokens.css`**.
-
-- **Direction:** brutalist Nordic bureaucracy. Think 1970s Finnish government forms meeting generative art. Lots of whitespace, rigid grid, one accent color, monospace or grotesk type from system-font stack (no webfont dependencies; if a webfont is irresistible, self-host it — no third-party requests, see §8).
-- `tokens.css` defines: color palette (max 5 colors + neutrals), type scale, spacing scale, border/rule conventions. All pages consume tokens only; no page defines its own colors or fonts.
-- **The chaos lives inside frames.** Interactive canvases may be wild; the chrome around them stays severe and ordered. This contrast *is* the visual identity.
-- Every page must be responsive and legible on mobile without separate effort (fluid grid, sensible canvas sizing).
-- Accessibility floor: semantic HTML, alt text, visible focus states, animations respect `prefers-reduced-motion`.
-
----
-
-## 5. The run protocol (what the agent does each invocation)
-
-Every run produces **exactly one artifact** plus its integration (nav/index updates, LOG entry). Never more. Run types rotate by default in this order, tracked in LOG.md:
-
-1. **Exhibit run** — build one interactive toy (§6 backlog). Self-contained page under `nayttely/`. Vanilla JS + Canvas/SVG only. No libraries unless truly needed; if needed, vendor the file into the repo (no CDN).
-2. **Bulletin run** — write one dated bulletin. May reference (in-fiction) the newest exhibit or department: this is how the site narrates its own growth.
-3. **Department or refinement run** — either add one department page, or perform a refinement pass: fix inconsistencies, improve a weak page, tune responsive behavior, prune anything that has aged badly. From run ~10 onward, prefer refinement over new departments (cap: 6 departments, 12 exhibits; beyond caps, new work replaces the weakest existing item — removal is allowed and encouraged).
-
-**Every run, in order:**
-1. Read `AGENT.md`, `CANON.md`, `BACKLOG.md`, `LOG.md`, and skim current site structure.
-2. Determine run type (next in rotation unless `run.sh` was passed an explicit type).
-3. Pick the top suitable item from BACKLOG.md (or invent one and note it).
-4. Build the artifact within all constraints (§3 tone, §4 design, §8 hard limits).
-5. Integrate: update nav/listing pages; append CANON.md if new canonical facts were created; append LOG.md; tick/adjust BACKLOG.md.
-6. Self-check (§7). Fix failures before proceeding.
-7. Branch `run/YYYY-MM-DD-<slug>`, commit, open PR. PR description: what was made, why this backlog item, any canon added, self-check results. **Never push to main directly.**
-
-### Bootstrap (run 0 — a larger, one-time run)
-Executed once, by Claude Code, from this spec: create repo structure, `CNAME`, tokens + base CSS, `index.html`, bulletin archive skeleton, one seed department, one seed exhibit, one inaugural bulletin, and all four `agent/` files — including writing `AGENT.md` itself: a condensed, self-contained operating manual distilled from §3–§8 of this spec, so future runs do not depend on this document. Also write README.md with the exact `run.sh` usage and the DNS/Pages setup checklist for the owner (Cloudflare A records to GitHub Pages IPs, Pages custom-domain setting, enforce HTTPS).
-
-### `run.sh`
-Minimal wrapper, committed to the repo root:
-- `git pull` main, verify clean tree.
-- Invoke `claude -p` with an instruction of the form: *"You are the Kaaostoimisto site agent. Read agent/AGENT.md and execute one run. Optional run type override: $1."* — with permissions to edit files and run git/gh.
-- Print the PR URL at the end.
-No cron, no launchd. The owner runs it when at the desk. (If scheduling is ever wanted, that is a one-line launchd job invoking the same script — out of scope now.)
+- **Direction: dark-field observatory.** Near-black background, luminous trajectories (additive blending / low-alpha trails), thin light-gray chrome, generous space. The severity of the frame against the organic glow of the simulation is the identity — inherited from the previous concept's "chaos inside frames" rule.
+- `tokens.css`: background and chrome neutrals, **one accent per arc section** (5 accents max, low-saturation), monospace-forward system font stack, type scale, spacing scale, control styling (sliders, buttons, readouts share one look).
+- **Controls are instruments, not toys:** every exhibit gets the same control strip — parameter sliders with numeric readouts, *Perturb* (apply 10⁻⁹-scale kick), *Twin* (toggle ghost trajectory), *Reset*, and where relevant *Speed*. Uniformity across exhibits is mandatory; it is what makes the atlas feel curated.
+- Full-viewport-width canvases on mobile, `devicePixelRatio`-aware rendering, target 60 fps with graceful degradation (reduce particle/segment counts, never reduce timestep accuracy).
+- `prefers-reduced-motion`: simulations start paused with a visible play control; no autoplay.
+- Accessibility: placard content is semantic HTML and fully readable without JS or WebGL; canvases carry meaningful `aria-label`s.
 
 ---
 
-## 6. Content backlog (seed — becomes `agent/BACKLOG.md`)
+## 5. Run protocol
 
-**Exhibits (interactive toys; all pure client-side):**
-- *Näyte 001 — Kaksoisheiluri*: double pendulum, trailing path, "specimen under observation" placard; drag to perturb.
-- *Näyte 002 — Lorenz-attraktori*: 3D-ish rotating Lorenz attractor on Canvas; sliders styled as official calibration dials.
-- *Näyte 003 — Jonotusnumerosimulaatio*: queue-number ticker that skips, stalls and misorders numbers; occasionally announces "asiakas 47 poistettu järjestelmästä."
-- *Näyte 004 — Organisaatiokaavio*: generative org chart that reshuffles itself on an interval; every node titled some variant of "vt. koordinaattori."
-- *Näyte 005 — Entropiamittari*: a gauge tracking "national entropy today," driven by seeded pseudo-randomness from the date — same value for all visitors, changes daily, purely client-side.
-- *Näyte 006 — Lomake K-7*: an official form whose fields drift, swap labels, and renumber themselves as you try to fill it. Submitting yields "Lomake vastaanotettu. Käsittelyaika: ∞." **Input goes nowhere** — no storage, no network.
-- *Näyte 007 — Konservoitu satunnaisuus*: particle system in a "vitrine"; particles behave until the visitor taps the glass.
-- *Näyte 008 — Sääennuste*: weather forecast for chaos ("huomenna hajanaista epäjärjestystä, paikoin selkeää"), generated client-side from date-seeded randomness.
+Inherited from the previous spec with these changes:
 
-**Departments:**
-- *Sattumavarasto* (Warehouse of Coincidences) — stores coincidences until claimed; unclaimed coincidences are auctioned annually.
-- *Viivästysvirasto* (Bureau of Delays) — its page loads elements deliberately, elegantly late.
-- *Kadonneiden ajatusten osasto* (Dept. of Lost Thoughts) — lost-and-found for thoughts; features a slowly scrolling ledger of found thoughts.
-- *Ennakoimattomuuden ennakointiyksikkö* (Unit for Anticipating the Unanticipated) — publishes forecasts that are officially always wrong (accuracy target: 0 %).
+**Run types:**
+1. **Specimen run** — build the next planned exhibit from CATALOGUE.md, in arc order.
+2. **Refinement run** — improve an existing exhibit: performance, explanation clarity, control feel, mobile behavior, visual polish. From catalogue completion onward, all runs are refinement runs.
+3. **Foundation run** — only when needed: changes to `sim.js`, tokens, or shared components. Requires regression pass over *all* exhibits that consume the changed code (§8, checked via the self-check of each affected page).
 
-**Bulletin seams (recurring in-fiction motifs the bulletins may draw on):**
-annual chaos statistics; renovation of the entropy archive; new form numbers entering force; the agency's one elevator being "temporarily deterministic"; recruitment notices for positions that cannot be described.
+Default rotation while the catalogue is open: specimen, specimen, refinement, repeat. **One artifact per run. PRs only.** PR description must include the §7 invariant results as measured numbers, not checkmarks.
 
-The agent appends new ideas to BACKLOG.md as they occur, keeping the queue at 10–20 open items. Ideas must fit the fiction and the caps in §5.
+**Bootstrap (run 0):** repo structure, `CNAME`, tokens + base CSS, `sim.js` with tested RK4 + semi-implicit/symplectic steppers + seeded RNG + fixed-timestep loop, `index.html` grid, `kartta` arc page, `agent/` files (AGENT.md distilled from §3–§8, CATALOGUE.md seeded from §6, STANDARDS.md from §7), README.md with owner setup checklist, and **Näyte 001** as the proof exhibit.
+
+**`run.sh`:** unchanged from the previous spec — pull, clean-tree check, invoke Claude Code headless with an execute-one-run instruction and optional type override, print PR URL. No scheduling.
 
 ---
 
-## 7. Self-check (agent runs before every PR)
+## 6. The catalogue (seed for `agent/CATALOGUE.md`)
 
-- [ ] All internal links resolve; new page is reachable from nav/listings.
-- [ ] Page uses only `tokens.css` variables for color/type; no inline style constants that bypass tokens.
-- [ ] Both languages present in the established pattern.
-- [ ] Valid HTML (well-formed; run a quick parse check), works without JS for all *content* (toys may require JS but the placard text must not).
-- [ ] `prefers-reduced-motion` respected by any animation.
-- [ ] Total page weight < 300 KB, no external requests (§8).
-- [ ] Tone check against §3: deadpan, no fourth-wall breaks, no real-world references.
-- [ ] LOG.md and (if applicable) CANON.md updated.
+Fourteen specimens. Per-specimen notes: system, method, renderer, and its defining interaction. Order = build order = arc order.
 
-Optional later: a GitHub Action running a link checker on PRs. Not required for launch.
+**I — Herkkyys**
+- **001 Kaksoisheiluri / Double pendulum.** Equations of motion via Lagrangian form; velocity-Verlet or RK4 at fixed dt with energy monitoring. Canvas 2D. *Defining interaction:* **ensemble mode** — release 100 pendulums differing by 10⁻⁷ rad as one apparent pendulum; watch them dissolve into a cloud. Trail rendering with fading alpha.
+- **002 Perhosvaikutus / Butterfly divergence.** Two Lorenz trajectories, Δ₀ = 10⁻⁹; main view plus a log-scale separation-vs-time graph whose slope *is* the largest Lyapunov exponent (annotate λ ≈ 0.9 for classic parameters). Canvas 2D. The atlas's conceptual anchor.
 
-## 8. Hard limits (never violated, never "improved away")
+**II — Attraktorit**
+- **003 Lorenz.** σ=10, ρ=28, β=8/3 default; RK4; rotating 3D projection (hand-rolled matrix, no library), additive trails. Sliders for ρ across [0, 350] with annotated regimes (fixed points → chaos → periodic windows).
+- **004 Rössler.** Same treatment; placard contrasts its single-scroll funnel with Lorenz's two lobes.
+- **005 Attraktorikokoelma / Attractor cabinet.** Thomas, Aizawa, Halvorsen, Dadras in one exhibit with a specimen-drawer selector. Shared integrator/projection code from 003.
+- **006 Hénon-kuvaus / Hénon map.** Discrete map, a=1.4 b=0.3; point-cloud accumulation revealing fractal banding; box-zoom into self-similar structure.
 
-1. **No backend, no serverless, no forms that transmit, no analytics, no cookies, no third-party requests of any kind.** Every asset is served from the repo. The site works fully offline once loaded.
-2. **No user input reaches any AI.** The agent runs only when the owner invokes `run.sh`.
-3. **No API keys, tokens, or secrets in the repo. Ever.**
-4. **One artifact per run.** Scope creep across the site in a single PR is a defect, even if the extra work is good.
-5. **PRs only; main is never pushed directly.** The human merge is the quality gate — keep diffs small and readable for a 10-second review.
-6. Content restrictions of §3 (no real people/companies/politics/current events) are absolute.
+**III — Reitit kaaokseen**
+- **007 Bifurkaatiodiagrammi / Logistic map bifurcation.** r ∈ [2.4, 4.0], progressive rendering in a Web Worker, smooth box-zoom re-rendering at full precision. Annotated period-doubling cascade; Feigenbaum δ ≈ 4.6692 noted and *visible* by measuring successive branch spacings on zoom.
+- **008 Seittikuvio / Cobweb plot.** Companion to 007: logistic iteration as cobweb, r-slider synchronized to a mini bifurcation strip; shows *why* the diagram looks as it does.
+- **009 Duffing + Poincaré.** Forced Duffing oscillator; left: phase trajectory; right: stroboscopic Poincaré section accumulating the strange attractor point by point. RK4, fixed dt locked to forcing period subdivisions.
+
+**IV — Altaat**
+- **010 Magneettiheiluri / Magnetic pendulum basins.** Per-pixel: final magnet (3 magnets, colored) as function of release point. WebGL2 fragment shader integrating per pixel; click any point to overlay the actual trajectory (CPU, Canvas overlay). Fractal basin boundary is the exhibit.
+- **011 Newtonin fraktaali / Newton's fractal.** z³−1 basins via shader; polynomial-root selector (z³−1, z⁴−1, z⁵−z). Placard: fractal boundaries from a *root-finding algorithm* — chaos in deterministic computation.
+- **012 Kissakuvaus / Arnold's cat map.** A raster image (a committed photo of a cat, owned/public-domain) scrambled by the map, iterated stepwise: apparent noise, then exact recurrence. Canvas 2D. Placard: mixing, determinism, and recurrence.
+
+**V — Säilyvä kaaos**
+- **013 Standardikuvaus / Standard map (kicked rotor).** Phase portrait: click to seed orbits, K-slider sweeping KAM tori → mixed phase space → global chaos. Canvas 2D, thousands of iterates per seed.
+- **014 Stadion vs. ympyrä / Stadium billiard.** Split view: circular billiard (integrable, caustics) vs stadium (chaotic); launch fans of near-identical rays in both simultaneously. Exact specular reflection geometry, no integrator needed. The atlas's closing contrast: same rules, one shape orderly, one chaotic.
+
+Catalogue is closed at 14. Additions require the owner to edit CATALOGUE.md by hand; the agent never expands it.
 
 ---
 
-## 9. Cost profile
+## 7. Numerical standards (seed for `agent/STANDARDS.md`)
 
-GitHub Pages: €0. Cloudflare DNS: €0. Domain: already owned. Only cost: Claude Code usage per run (single-artifact runs on a small static repo are cheap; the repo must be kept small precisely so runs stay cheap — another reason for the caps in §5 and the no-framework rule in §2).
+1. **Integrators:** RK4 minimum for dissipative ODEs; symplectic/semi-implicit (or velocity Verlet) for conservative systems (001, 013 is a map, 014 is geometric). Plain forward Euler is prohibited everywhere.
+2. **Fixed timestep, decoupled from frame rate.** Accumulator pattern in `sim.js`; rendering interpolates. Frame-rate drops must never change trajectories.
+3. **Determinism:** all randomness through the seeded RNG in `sim.js`; a given seed + parameters reproduces the identical run. Perturbation magnitudes are explicit named constants shown in the UI.
+4. **Invariant checks, per exhibit, measured and reported in the PR:**
+   - 001: relative energy drift < 10⁻⁶ over 60 simulated seconds (unforced, undamped mode).
+   - 002: measured λ within ±15 % of 0.9 for classic Lorenz parameters.
+   - 003–005: attractor bounding box matches published ranges (e.g. Lorenz z ∈ ~[0, 50]); trajectories bounded for 10⁶ steps.
+   - 006: iterates remain bounded from the standard basin; visual match to reference structure.
+   - 007: first three bifurcation points within 10⁻³ of r₁=3, r₂≈3.4495, r₃≈3.5441; δ estimate from branches within 5 % of 4.669.
+   - 009: Poincaré section stationary in distribution after transient discard (first 50 periods dropped).
+   - 010–011: shader and CPU trajectory agree on final basin for ≥ 95 % of 100 random test points.
+   - 012: exact recurrence to the original image at the known period for the chosen image dimensions.
+   - 013: for K=0.5, seeded KAM orbits remain on invariant curves (bounded p-excursion) for 10⁵ iterates.
+   - 014: circle-billiard ray fan preserves caustic structure; energy (speed) exactly conserved in both tables.
+5. **Equations shown = code run.** The MathML on the placard must state exactly the equations and parameter values implemented, including the integrator name and dt. Any mismatch is a defect.
+6. **Precision:** double precision on CPU. In shaders (single precision), cap iteration counts/times to keep per-pixel error below basin-flipping thresholds near boundaries — state the chosen cap in a code comment with reasoning.
 
 ---
 
-*End of specification. Bootstrap per §5 "run 0," then hand the keys to `run.sh`.*
+## 8. Self-check (before every PR)
+
+- [ ] §7 invariants for the touched exhibit(s) measured; numbers in the PR description.
+- [ ] Foundation runs only: every exhibit consuming changed shared code re-verified (its invariants re-measured).
+- [ ] Fixed-dt loop from `sim.js` used; no per-exhibit reimplementation of integration or timing.
+- [ ] Placard readable without JS/WebGL; WebGL exhibits have committed PNG fallback; canvases have `aria-label`s.
+- [ ] `prefers-reduced-motion`: paused start honored.
+- [ ] Only `tokens.css` variables for color/type; control strip uses the shared component classes.
+- [ ] Both languages present in the fixed pattern; "Havainto" line present.
+- [ ] Page weight < 500 KB including fallback image; zero external requests; works offline once loaded.
+- [ ] 60 fps on a mid-range laptop at default settings (measure with a 10 s rAF sample; report the number).
+- [ ] Internal links resolve; index grid and kartta page updated; LOG.md and CATALOGUE.md updated.
+
+---
+
+## 9. Hard limits
+
+1. **No backend, no analytics, no cookies, no third-party requests, no CDN assets, no external fonts.** Everything served from the repo; the site works fully offline.
+2. **No libraries.** No three.js, no KaTeX, no d3. Native Canvas 2D, raw WebGL2, native MathML, hand-rolled math. (This is a correctness measure as much as a dependency measure: all numerics live in reviewable repo code.)
+3. **No user input reaches any AI; the agent runs only via `run.sh`.** Interactivity is purely client-side simulation control.
+4. **No secrets in the repo, ever.**
+5. **One artifact per run; PRs only; main never pushed directly.**
+6. **The catalogue is closed** (§6). The agent may refine forever but never adds specimen 015 on its own.
+7. **Scientific integrity:** no invented physics, no decorative fake mathematics, correct attributions. If a simplification is made (e.g. small-angle anywhere, projection choices), the placard says so.
+
+---
+
+## 10. Cost profile
+
+Infrastructure €0 (Pages + Cloudflare DNS + owned domain). Claude Code usage per run is the only cost. Specimen runs are heavier than the satire site's runs (real numerics + self-verification), but the catalogue is finite: after ~20 runs the site is complete and drops to occasional cheap refinement. Total lifetime cost is bounded by design.
+
+---
+
+*End of specification. Bootstrap per §5 run 0; Näyte 001 is the proof that the standards in §7 are actually enforceable before the rest of the catalogue proceeds.*

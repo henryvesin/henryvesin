@@ -1,16 +1,24 @@
-# kaaostoimisto.fi
+# kaaostoimisto.fi — kaaoksen havaintoarkisto
 
-A satirical, self-growing static site: a deadpan Finnish government-adjacent
-agency responsible for administering chaos. Static HTML/CSS/JS, no backend,
-no build step, hosted on GitHub Pages. It grows one artifact at a time —
-an interactive toy, a department, or a bulletin — each produced by a single
-Claude Code run and merged as a pull request.
+A static, numerically honest atlas of chaotic systems: the Lorenz
+attractor, the double pendulum, bifurcation diagrams, fractal basins.
+Every specimen is a real, interactive simulation — not an illustration
+— whose placard states exactly the equations and integrator the code
+actually runs. Static HTML/CSS/JS, no backend, no build step, hosted on
+GitHub Pages. It grows one specimen at a time, each produced by a
+single Claude Code run and merged as a pull request.
+
+This replaced an earlier, unrelated concept for the same domain (a
+satirical bureaucratic-agency site) on 2026-08-03. See
+[`agent/LOG.md`](agent/LOG.md) for the pivot and
+[`agent/SPEC-v1-satire.md`](agent/SPEC-v1-satire.md) for the archived
+original, kept for provenance only.
 
 - The full operating manual the agent reads every run: [`agent/AGENT.md`](agent/AGENT.md)
-- Canonical facts about the fictional agency: [`agent/CANON.md`](agent/CANON.md)
-- What's queued to build next: [`agent/BACKLOG.md`](agent/BACKLOG.md)
+- The 14-specimen catalogue and build status: [`agent/CATALOGUE.md`](agent/CATALOGUE.md)
+- Numerical standards and the invariant table: [`agent/STANDARDS.md`](agent/STANDARDS.md)
 - Run history: [`agent/LOG.md`](agent/LOG.md)
-- The original design spec (kept for provenance; the agent no longer needs it): [`agent/SPEC.md`](agent/SPEC.md)
+- The current design spec (kept for provenance; the agent no longer needs it): [`agent/SPEC.md`](agent/SPEC.md)
 
 ## Running a growth cycle
 
@@ -19,24 +27,25 @@ Claude Code run and merged as a pull request.
 ```
 
 This pulls `main`, verifies the tree is clean, and hands one run off to
-`claude -p`, which reads `agent/AGENT.md`, builds exactly one artifact,
-self-checks it, and opens a PR. The PR URL prints at the end — review the
-diff and merge it. That's the entire loop.
+`claude -p`, which reads `agent/AGENT.md`, builds exactly one specimen
+or refinement, measures and reports its numerical invariants, and opens
+a PR. The PR URL prints at the end — review the diff (and the reported
+numbers) and merge it. That's the entire loop.
 
 To force a specific run type instead of the next one in rotation:
 
 ```bash
-./run.sh exhibit      # or: bulletin, department
+./run.sh specimen      # or: refinement
 ```
 
-No cron, no launchd — run it whenever you're at the desk. (If scheduling is
-ever wanted, a one-line launchd job invoking this same script would do it —
-intentionally out of scope for now.)
+No cron, no launchd — run it whenever you're at the desk.
 
 ## One-time setup checklist
 
 Everything below is a manual, external-account step — the agent never
-touches your GitHub account settings, DNS, or auth.
+touches your GitHub account settings, DNS, or auth. This project's repo,
+DNS, and Pages custom domain are already configured; this checklist is
+kept as reference for a fresh clone or a disaster-recovery setup.
 
 1. **Authenticate `gh`:**
    ```bash
@@ -45,7 +54,7 @@ touches your GitHub account settings, DNS, or auth.
 2. **Create the GitHub repo** (public — GitHub Pages custom domains need a
    public repo on the free plan):
    ```bash
-   gh repo create kaaostoimisto --public --source=. --remote=origin --push
+   gh repo create <name> --public --source=. --remote=origin --push
    ```
 3. **Cloudflare DNS** — point the apex domain at GitHub Pages:
    - Four `A` records for `kaaostoimisto.fi` →
@@ -65,10 +74,14 @@ touches your GitHub account settings, DNS, or auth.
 
 ## Design notes for humans
 
-The entire visual identity lives in `assets/tokens.css` — one palette (5
-accents + paper/ink neutrals), one type scale, one spacing scale, zero
-border-radius except the agency seal. `assets/base.css` builds every
-component (masthead, nav, bilingual blocks, cards, exhibit frames) from
-those tokens only. This is deliberate and enforced by the agent's own
-self-check every run, so the site still looks like one designer made it
-after fifty runs.
+The entire visual identity lives in `assets/tokens.css`: a near-black
+"dark-field observatory" palette, one low-saturation accent color per
+arc section, one monospace type family used boldly for headings and
+normally for body/data. `assets/base.css` builds every component
+(masthead, nav, bilingual blocks, placards, the uniform control strip,
+exhibit frames) from those tokens only — no page defines its own color
+or font. `assets/sim.js` holds the shared, tested numerics (seeded RNG,
+generic RK4, the fixed-timestep accumulator loop, DPR-aware canvas
+setup) that every exhibit builds on rather than re-deriving. This is
+enforced by the agent's own self-check every run, so the site still
+looks and behaves like one thing after fourteen specimens.

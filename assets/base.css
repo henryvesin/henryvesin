@@ -1,7 +1,6 @@
 /*
-  Kaaostoimisto — base layout, typography, and shared components.
-  Consumes tokens.css only. No page overrides these rules with its
-  own inline colors or fonts.
+  Kaaostoimisto — kaaoksen havaintoarkisto. Base layout, typography,
+  placard, and control-strip components. Consumes tokens.css only.
 */
 
 *,
@@ -16,20 +15,18 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-chrome);
+  font-family: var(--font-mono);
   font-size: var(--text-1);
   line-height: var(--leading-normal);
-  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-weight: var(--weight-heading);
-  line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heading);
-  text-transform: var(--heading-transform);
+  line-height: var(--leading-tight);
   margin: 0 0 var(--space-2);
 }
 
@@ -40,23 +37,21 @@ h3 { font-size: var(--text-2); }
 p { margin: 0 0 var(--space-2); }
 
 a {
-  color: var(--color-accent-blue);
+  color: var(--color-chrome);
   text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
 }
 
-a:hover { color: var(--color-accent-red); }
+a:hover { color: var(--accent); }
 
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);
 }
 
-code, .mono, .specimen-code, .form-number {
-  font-family: var(--font-mono);
-}
-
 img, canvas, svg { max-width: 100%; }
+
+math { color: inherit; }
 
 /* ---------- Layout ---------- */
 
@@ -66,78 +61,49 @@ img, canvas, svg { max-width: 100%; }
   padding: 0 var(--space-3);
 }
 
-/* ---------- Letterhead / masthead ---------- */
+/* ---------- Masthead ---------- */
 
 .masthead {
-  border-top: var(--rule-heavy);
   border-bottom: var(--rule-hairline);
   padding: var(--space-3) 0;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
 }
 
 .masthead-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-3);
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .masthead-identity {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.masthead-identity > div {
-  min-width: 0; /* let the title wrap/shrink instead of forcing flex overflow */
+  min-width: 0;
 }
 
 .masthead-name {
   font-size: var(--text-2);
   font-weight: var(--weight-heading);
   letter-spacing: var(--tracking-heading);
-  text-transform: var(--heading-transform);
   overflow-wrap: anywhere;
 }
 
 .masthead-tagline {
   font-size: var(--text-0);
-  color: var(--color-ink-soft);
-  font-style: italic;
+  color: var(--color-chrome-soft);
 }
-
-/* The agency seal: a graphic stamp motif, the one deliberate
-   exception to the zero-border-radius rule (see tokens.css). */
-.seal {
-  flex: none;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  border: 2px solid var(--color-accent-red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: var(--text-0);
-  color: var(--color-accent-red);
-}
-
-/* ---------- Nav ---------- */
 
 .site-nav ul {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin: var(--space-2) 0 0;
+  margin: 0;
   padding: 0;
   font-size: var(--text-0);
 }
 
 .site-nav a {
-  color: var(--color-ink);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
@@ -145,8 +111,8 @@ img, canvas, svg { max-width: 100%; }
 
 .site-nav a:hover,
 .site-nav a[aria-current="page"] {
-  border-bottom-color: var(--color-accent-red);
-  color: var(--color-ink);
+  border-bottom-color: var(--accent);
+  color: var(--color-chrome);
 }
 
 /* ---------- Footer ---------- */
@@ -155,7 +121,7 @@ img, canvas, svg { max-width: 100%; }
   border-top: var(--rule-hairline);
   margin-top: var(--space-7);
   padding: var(--space-3) 0 var(--space-5);
-  color: var(--color-ink-soft);
+  color: var(--color-chrome-soft);
   font-size: var(--text-0);
 }
 
@@ -178,10 +144,9 @@ img, canvas, svg { max-width: 100%; }
 
 .lang-tag {
   display: inline-block;
-  font-family: var(--font-mono);
   font-size: var(--text--1);
   letter-spacing: 0.08em;
-  color: var(--color-accent-blue);
+  color: var(--accent);
   border: var(--rule-hairline);
   padding: 0 0.4em;
   margin-bottom: var(--space-1);
@@ -195,176 +160,205 @@ img, canvas, svg { max-width: 100%; }
   margin: var(--space-5) 0;
 }
 
-.letterhead-rule {
-  border: none;
-  border-top: var(--rule-heavy);
-  border-bottom: 1px solid var(--color-ink);
-  height: 0;
-  margin: var(--space-4) 0;
-}
-
-/* ---------- Cards / listings ---------- */
-
-.card {
-  border: var(--rule-hairline);
-  padding: var(--space-3);
-  background: var(--color-paper-raised);
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: var(--space-3);
-  margin: var(--space-3) 0;
-}
-
 .meta {
-  font-family: var(--font-mono);
   font-size: var(--text--1);
-  color: var(--color-ink-soft);
+  color: var(--color-chrome-soft);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* ---------- Exhibit frame — the "severe frame" around chaos ---------- */
+.arc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--text--1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-chrome-soft);
+}
+
+.arc-dot {
+  width: 0.6em;
+  height: 0.6em;
+  background: var(--accent);
+  flex: none;
+}
+
+/* ---------- Specimen grid (front page) ---------- */
+
+.specimen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--color-rule);
+  border: var(--rule-hairline);
+  margin: var(--space-3) 0 var(--space-5);
+}
+
+.specimen-card {
+  background: var(--color-bg);
+  padding: var(--space-3);
+  text-decoration: none;
+  color: var(--color-chrome);
+  display: block;
+  min-height: 9rem;
+}
+
+.specimen-card:hover {
+  background: var(--color-bg-raised);
+}
+
+.specimen-card .specimen-number {
+  font-size: var(--text--1);
+  color: var(--color-chrome-soft);
+}
+
+.specimen-card h3 {
+  font-size: var(--text-1);
+  margin: var(--space-1) 0;
+}
+
+.specimen-card p {
+  font-size: var(--text-0);
+  color: var(--color-chrome-soft);
+  margin: 0;
+}
+
+.specimen-card.is-planned {
+  color: var(--color-chrome-soft);
+  cursor: default;
+}
+
+.specimen-card.is-planned h3 {
+  color: var(--color-chrome-soft);
+  font-weight: 400;
+}
+
+.specimen-card.is-planned .meta-status::after {
+  content: " — tulossa · upcoming";
+}
+
+/* ---------- Exhibit frame — dark-field canvas panel ---------- */
 
 .exhibit-frame {
   border: var(--rule-heavy);
-  padding: var(--space-2);
-  background: var(--color-vitrine);
+  background: var(--color-bg-raised);
+  padding: var(--space-1);
   margin: var(--space-3) 0;
 }
 
 .exhibit-frame canvas {
   display: block;
   width: 100%;
-  height: auto;
-  background: var(--color-vitrine);
+  aspect-ratio: 16 / 13; /* CSS-controlled box size, independent of the
+                            canvas's internal pixel-buffer resolution —
+                            see Kaaos.setupCanvas in sim.js */
+  background: var(--color-bg);
 }
 
 .placard {
   border: var(--rule-hairline);
   border-top: none;
   padding: var(--space-3);
-  margin-top: calc(-1 * var(--space-3));
 }
 
-/* ---------- Appearance switch ---------- */
+.observation {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-2);
+  margin: var(--space-3) 0;
+}
 
-.theme-switch {
-  position: fixed;
-  top: var(--space-2);
-  right: var(--space-2);
-  z-index: 100;
+.observation .meta { color: var(--accent); }
+
+/* ---------- Control strip — instruments, not toys ---------- */
+
+.control-strip {
   display: flex;
-  background: var(--color-paper);
-  border: var(--rule-heavy);
-  max-width: calc(100vw - 2 * var(--space-2));
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+  background: var(--control-bg);
+  border: var(--control-border);
+  border-top: none;
+  padding: var(--space-2) var(--space-3);
 }
 
-.theme-switch button {
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  font-size: var(--text--1);
+}
+
+.control label {
+  color: var(--color-chrome-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.control-readout {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.control input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 10rem;
+  height: 2px;
+  background: var(--control-track);
+  outline: none;
+}
+
+.control input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--accent);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.control input[type="range"]::-moz-range-thumb {
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.control-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: var(--color-rule);
+  border: var(--rule-hairline);
+  margin-left: auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.control-buttons button {
   font-family: var(--font-mono);
   font-size: var(--text--1);
-  letter-spacing: 0.03em;
   text-transform: uppercase;
-  padding: 0.45em 0.65em;
+  letter-spacing: 0.05em;
+  padding: 0.6em 0.9em;
   border: none;
-  background: transparent;
-  color: var(--color-ink);
+  background: var(--color-bg-raised);
+  color: var(--color-chrome);
   cursor: pointer;
-  white-space: nowrap;
 }
 
-.theme-switch button + button {
-  border-left: var(--rule-hairline);
+.control-buttons button:hover {
+  color: var(--accent);
 }
 
-.theme-switch button[aria-pressed="true"] {
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-
-.theme-switch button:hover {
-  color: var(--color-accent-red);
-}
-
-.theme-switch button[aria-pressed="true"]:hover {
-  color: var(--color-paper);
-}
-
-.theme-switch button {
-  min-width: 0; /* flex items default to min-width:auto, which defeats white-space:normal below */
-}
-
-@media (max-width: 30rem) {
-  .theme-switch {
-    /* Fixed top-right doesn't leave room next to the huge agency
-       wordmark at this width — fall back to a normal top-of-page
-       block instead of floating over the title. */
-    position: static;
-    max-width: none;
-    width: 100%;
-    margin-bottom: var(--space-2);
-  }
-
-  .theme-switch button {
-    flex: 1;
-    text-align: center;
-    font-size: 0.7rem;
-    padding: 0.6em 0.5em;
-    white-space: normal;
-    line-height: 1.2;
-    max-width: none;
-  }
-}
-
-/* ---------- "Uusi ilme" (New look) theme-scoped overrides ----------
-   Everything above already reads tokens, so most of the look-change
-   happens in tokens.css. What's left here is the handful of rules
-   that need a genuinely different treatment, not just different
-   values, under data-theme="agency". */
-
-[data-theme="agency"] .masthead {
-  border-top-width: 6px;
-}
-
-[data-theme="agency"] .masthead-name {
-  font-size: var(--text-4);
-  line-height: 0.9;
-}
-
-[data-theme="agency"] .masthead-tagline {
-  font-style: normal;
-  text-transform: var(--heading-transform);
-  letter-spacing: 0.02em;
-}
-
-[data-theme="agency"] .site-nav ul {
-  gap: var(--space-4);
-  font-size: var(--text-1);
-  font-weight: var(--weight-heading);
-  text-transform: var(--heading-transform);
-}
-
-[data-theme="agency"] .site-nav a {
-  border-bottom-width: 2px;
-}
-
-[data-theme="agency"] a:hover {
-  color: var(--color-paper);
-  background: var(--color-ink);
-}
-
-[data-theme="agency"] .card,
-[data-theme="agency"] .exhibit-frame,
-[data-theme="agency"] .placard,
-[data-theme="agency"] .seal {
-  border-width: 2px;
-}
-
-[data-theme="agency"] .lang-tag {
-  border-width: 2px;
-  font-weight: 700;
+.control-buttons button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--color-bg);
 }
 
 /* ---------- Reduced motion ---------- */
@@ -376,6 +370,16 @@ img, canvas, svg { max-width: 100%; }
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ---------- Arc accent wiring ---------- */
+/* Each specimen/arc page sets data-arc on <html>; every component that
+   reads var(--accent) picks up the right color with no further work. */
+
+[data-arc="1"] { --accent: var(--accent-arc-1); }
+[data-arc="2"] { --accent: var(--accent-arc-2); }
+[data-arc="3"] { --accent: var(--accent-arc-3); }
+[data-arc="4"] { --accent: var(--accent-arc-4); }
+[data-arc="5"] { --accent: var(--accent-arc-5); }
 
 /* ---------- Utility ---------- */
 
