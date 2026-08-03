@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fi" data-arc="5">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 014 — Stadion vs. ympyrä — Kaaostoimisto</title>
+<meta name="description" content="Näyte 014: sama säteenkimmotusfysiikka kahdessa pöydässä — ympyrä säilyttää kaustisen rakenteen, stadion hajottaa säteet eksponentiaalisesti.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> V · Säilyvä kaaos · Conservative chaos</p>
+  <p class="meta">Näyte 014 · Specimen 014</p>
+  <h1>Stadion vs. ympyrä · Stadium vs. Circle Billiard</h1>
+
+  <div style="display:flex; gap:var(--space-2); flex-wrap:wrap;">
+    <div class="exhibit-frame" style="flex:1 1 280px; margin:var(--space-3) 0;">
+      <canvas id="circle-canvas" style="aspect-ratio:1/1; width:100%;" role="img"
+        aria-label="Ympyräbiljardi: säteet pysyvät kimppuna ja piirtävät kaustisen käyrän. / Circle billiard: rays stay bundled and trace a caustic curve."></canvas>
+      <p class="meta" style="text-align:center; margin-top:var(--space-1);">Ympyrä · Circle (integroituva)</p>
+    </div>
+    <div class="exhibit-frame" style="flex:1 1 280px; margin:var(--space-3) 0;">
+      <canvas id="stadium-canvas" style="aspect-ratio:1/1; width:100%;" role="img"
+        aria-label="Stadionbiljardi: samat säteet hajoavat nopeasti eri suuntiin. / Stadium billiard: the same rays scatter apart quickly."></canvas>
+      <p class="meta" style="text-align:center; margin-top:var(--space-1);">Stadion · Stadium (kaoottinen)</p>
+    </div>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Viuhkan hallinta · Fan controls">
+    <div class="control">
+      <label for="ctrl-angle">Kulma · Angle</label>
+      <input type="range" id="ctrl-angle" min="0" max="6.283" step="0.01" value="0.35">
+      <span class="control-readout" id="ctrl-angle-readout">0.35 rad</span>
+    </div>
+    <div class="control-buttons">
+      <button type="button" id="ctrl-launch">Käynnistä viuhka · Launch fan</button>
+      <button type="button" id="ctrl-clear">Tyhjennä · Clear</button>
+    </div>
+  </div>
+  <p class="meta" style="margin-top:var(--space-2);">15 sädettä, 0,004 radiaanin kokonaishajonta — silmämääräisesti yksi säde — 24 kimmoa kummassakin pöydässä samanaikaisesti.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Sama tarkka peilautumisfysiikka, kaksi pöytää. Ympyrässä säteen ja paikallisen säteen (keskipisteestä) välinen kulma säilyy joka kimmolla — säteet pysyvät nippuna ja sivuavat aina samaa sisempää ympyrää (kaustinen käyrä). Stadionissa — kaksi suoraa sivua ja kaksi puoliympyrää päissä, ei mitään "väärää" kaarevuutta missään — samat lähes identtiset säteet hajoavat muutamassa kimmossa täysin eri suuntiin.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>The same exact reflection physics, two tables. In the circle, the angle between a ray and the local radius (from the center) is conserved every bounce — the rays stay bundled, always tangent to the same inner circle (a caustic). In the stadium — two straight sides and two semicircular caps, nothing "wrong-way curved" anywhere — the same nearly-identical rays scatter in completely different directions within a handful of bounces.</p>
+      </div>
+    </div>
+
+    <h2>Peilautuminen · Reflection</h2>
+    <math display="block">
+      <mrow>
+        <msup><mi>d</mi><mo>′</mo></msup>
+        <mo>=</mo>
+        <mi>d</mi>
+        <mo>−</mo>
+        <mn>2</mn>
+        <mo>(</mo><mi>d</mi><mo>·</mo><mi>n</mi><mo>)</mo>
+        <mi>n</mi>
+      </mrow>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>d = säteen suuntavektori, n = seinän yksikkönormaali kimmopisteessä. Ei integrointia — seuraava kimmopiste ratkaistaan tarkasti (suora ympyrän tai janan leikkaus). Ympyrän säde R=1; stadionin suorat sivut pituudeltaan 2×0,6, päädyt R=0,6.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>d = the ray's direction vector, n = the wall's unit normal at the bounce point. No integration — the next bounce point is solved exactly (a closed-form line or circle intersection). Circle radius R=1; stadium straight sides length 2×0.6, caps R=0.6.</p>
+      </div>
+    </div>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Mitattu: nopeus |d| pysyi vakiona ~10⁻¹⁴:n tarkkuudella 2000–3000 kimmon yli molemmissa pöydissä. Ympyrässä kaustisen etäisyyden (kimmojanan etäisyys keskipisteestä) vaihtelu 2000 kimmon yli oli 5×10⁻¹⁵ — käytännössä vakio, kuten teoria ennustaa. Rakennusvaiheessa löytyi ja korjattiin todellinen bugi: pyöreän seinän normaalin normalisointi oletetulla säteellä (piste/R) eikä pisteen omalla mitatulla pituudella (piste/|piste|) vahvisti liukulukuvirhettä noin 16-kertaisesti joka kimmolla ja räjähti NaN:ksi 15 kimmon sisällä — korjattu, dokumentoitu `billiards.js`:n alussa.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Measured: speed |d| stayed constant to ~10⁻¹⁴ over 2000–3000 bounces in both tables. In the circle, the caustic distance (the bounce-chord's distance from the center) varied by 5×10⁻¹⁵ over 2000 bounces — effectively constant, as theory predicts. A real bug surfaced and was fixed during development: normalizing a circular wall's normal by the assumed radius (point/R) instead of the point's own measured length (point/|point|) amplified floating-point error roughly 16× per bounce and blew up to NaN within 15 bounces — fixed, documented at the top of `billiards.js`.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Käynnistä viuhka useilla kulmilla: ympyrässä säteet pysyvät aina siistinä tähtikuviona, stadionissa ne ovat jo parinkymmenen kimmon jälkeen levinneet ympäri koko pöydän — sama fysiikka, eri geometria, täysin eri kohtalo.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Launch the fan at several angles: in the circle the rays always settle into a tidy star pattern; in the stadium they've spread across the entire table within a couple dozen bounces — the same physics, a different shape, a completely different fate.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 014</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="billiards.js"></script>
+</body>
+</html>

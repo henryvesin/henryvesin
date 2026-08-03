@@ -122,3 +122,25 @@ Append-only. One line per run: date, type, what was made.
   surviving stability island at K=2.5). `index.html` grid card and
   `CATALOGUE.md` updated. Next up: 014 (stadium billiard), then final
   integration.
+- 2026-08-03 — manual (direct request, same session) — built Näyte 014
+  (stadium vs. circle billiard), the atlas's closing specimen: exact
+  specular reflection (closed-form line/circle intersection, no
+  integrator anywhere), a one-click fan of 15 near-identical rays
+  launched simultaneously into both tables. While developing the
+  circular-table reflection, hit and fixed a real bug worth recording:
+  normalizing the wall normal at a circular boundary by the *assumed*
+  radius (point/R) instead of the collision point's own *measured*
+  length (point/|point|) fed a slightly non-unit normal into the
+  reflection formula — which only preserves vector length for an
+  exactly-unit normal — and the resulting error compounded roughly 16×
+  per bounce, reaching NaN within about 15 bounces. Caught by actually
+  running the invariant check over many bounces rather than a handful;
+  fixed by normalizing by the point's own length everywhere a boundary
+  normal is computed (documented at the top of `billiards.js`). After
+  the fix, verified in-browser against the shipped functions: speed
+  conserved to ~10⁻¹⁴ over 2000–3000 bounces in both tables, and the
+  circle's caustic distance constant to 5×10⁻¹⁵ over 2000 bounces.
+  `index.html` grid card and `CATALOGUE.md` updated — this was the
+  last planned specimen; `CATALOGUE.md` now shows all 14 built. Next:
+  final integration (kartta cross-check, full self-check across all
+  14, final commit).

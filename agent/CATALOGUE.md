@@ -118,8 +118,18 @@ completes.
       width 1.19 (under a fifth of the full 2π≈6.28 range — bounded,
       on an invariant curve); the same seed and iteration count at
       K=5 filled the full range, width 6.28.
-- [ ] **014 Stadion vs. ympyrä / Stadium billiard** — planned. Split
-      view: circular billiard (integrable, caustics) vs stadium
-      (chaotic); launch fans of near-identical rays in both
-      simultaneously. Exact specular reflection geometry, no
-      integrator needed. The atlas's closing contrast.
+- [x] **014 Stadion vs. ympyrä / Stadium billiard** — built,
+      2026-08-03. Split view, exact specular reflection (d'=d−2(d·n)n,
+      closed-form line/circle intersection, no integrator); one-click
+      fan of 15 rays (0.004 rad total spread) launched simultaneously
+      into both tables, 24 bounces each. Verified against the shipped
+      functions: speed conserved to ~10⁻¹⁴ over 2000–3000 bounces in
+      both tables; circle caustic distance constant to 5×10⁻¹⁵ over
+      2000 bounces. A real bug was found and fixed during development
+      — normalizing a circular wall's normal by the assumed radius
+      instead of the point's own measured length amplified
+      floating-point error ~16× per bounce and produced NaN within 15
+      bounces — documented in `billiards.js` and on the placard. The
+      atlas's closing contrast: the circle fan stays a coherent star
+      polygon; the same fan fills the entire stadium within ~20
+      bounces.
