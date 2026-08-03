@@ -82,9 +82,19 @@ completes.
       silently dropped the one-time render, and a y-axis convention
       mismatch (`gl.readPixels` vs 2D canvas) in the verification
       script itself.
-- [ ] **011 Newtonin fraktaali / Newton's fractal** — planned. z³−1
-      basins via shader; polynomial-root selector (z³−1, z⁴−1, z⁵−z).
-      Needs a committed PNG fallback.
+- [x] **011 Newtonin fraktaali / Newton's fractal** — built, 2026-08-03.
+      WebGL2 fragment shader, per-pixel complex Newton iteration
+      (z_{n+1}=z_n−f(z_n)/f'(z_n)), 60-step cap; polynomial-root
+      selector (z³−1, z⁴−1, z⁵−z); click-to-overlay two CPU trajectories
+      1e-6 apart (twin) to make the fractal boundary directly visible;
+      committed PNG fallback (`fallback.png`, z³−1, generated from the
+      same CPU model — no PIL/numpy available in this environment, so
+      written with a small hand-rolled PNG encoder). Measured shader/CPU
+      agreement on 100 random points per polynomial: 99/100 (z³−1),
+      96/100 (z⁴−1), 100/100 (z⁵−z) — all above the 95% target, unlike
+      010. Reused 010's `preserveDrawingBuffer`/resize-order fix and
+      `Kaaos.compileGLProgram`/`Kaaos.drawFullscreenQuad` directly, no
+      new shared-code bugs hit.
 - [ ] **012 Kissakuvaus / Arnold's cat map** — planned. Recurrence
       period should be found empirically (iterate until the image
       returns exactly to its start — this works for any N, no formula

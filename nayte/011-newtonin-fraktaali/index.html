@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fi" data-arc="4">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Näyte 011 — Newtonin fraktaali — Kaaostoimisto</title>
+<meta name="description" content="Näyte 011: Newtonin menetelmän juurenhaun vetovoima-altaat kompleksitasossa, laskettu pikseli kerrallaan WebGL2:lla.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-row">
+      <div class="masthead-identity">
+        <div class="masthead-name">Kaaostoimisto</div>
+        <div class="masthead-tagline">kaaoksen havaintoarkisto</div>
+      </div>
+      <nav class="site-nav" aria-label="Päävalikko / Main navigation">
+        <ul>
+          <li><a href="../../index.html">Atlas</a></li>
+          <li><a href="../../kartta/index.html">Kartta · Map</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="meta"><a href="../../index.html">← Atlas</a></p>
+  <p class="arc-tag"><span class="arc-dot" aria-hidden="true"></span> IV · Altaat · Basins</p>
+  <p class="meta">Näyte 011 · Specimen 011</p>
+  <h1>Newtonin fraktaali · Newton's Fractal</h1>
+
+  <div class="exhibit-frame">
+    <div style="position:relative; width:100%; aspect-ratio:1/1;">
+      <canvas id="fractal-canvas" style="position:absolute; inset:0; width:100%; height:100%;"
+        role="img" aria-label="Newtonin menetelmän vetovoima-altaat valitulle polynomille kompleksitasossa. / Newton's-method basins of attraction for the selected polynomial in the complex plane."></canvas>
+      <canvas id="overlay-canvas" style="position:absolute; inset:0; width:100%; height:100%; cursor:crosshair;"
+        role="img" aria-label="Napauta nähdäksesi kahden lähes samanpisteisen aloituksen radat CPU:lla laskettuna. / Click to see two nearly-identical starting points' paths, computed on the CPU."></canvas>
+      <img id="fallback-img" src="fallback.png" alt="Esilaskettu Newtonin fraktaalin kuva polynomille z³−1. / Pre-rendered image of Newton's fractal for z³−1." style="display:none; position:absolute; inset:0; width:100%; height:100%;">
+    </div>
+  </div>
+
+  <div class="control-strip" role="group" aria-label="Polynomin valinta · Polynomial selection" id="mode-selector">
+    <div class="control-buttons" role="group" aria-label="Polynomi · Polynomial">
+      <button type="button" data-mode="3" aria-pressed="true">z³ − 1</button>
+      <button type="button" data-mode="4" aria-pressed="false">z⁴ − 1</button>
+      <button type="button" data-mode="5z" aria-pressed="false">z⁵ − z</button>
+    </div>
+  </div>
+  <p class="meta" id="render-note" style="margin-top:var(--space-2);">Napauta kuvaa nähdäksesi kaksi lähes samanpisteistä rataa, jotka voivat päätyä eri juuriin.</p>
+
+  <div class="placard">
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Newtonin menetelmä etsii polynomin nollakohtia parantamalla arvausta askel kerrallaan. Jokainen pikseli tässä kuvassa on yksi aloitusarvaus kompleksitasossa; väri kertoo, mihin juureen menetelmä siitä päätyy. Menetelmä itsessään ei ole kaoottinen sääntönä — mutta se, mihin juureen se päätyy, riippuu aloituspisteestä niin herkästi, että altaiden raja on fraktaali.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Newton's method finds a polynomial's roots by refining a guess one step at a time. Every pixel in this image is one starting guess in the complex plane; its color says which root the method lands on. The method itself isn't chaotic as a rule — but which root it lands on depends on the starting point so sensitively that the boundary between basins is a fractal.</p>
+      </div>
+    </div>
+
+    <h2>Menetelmä · Method</h2>
+    <math display="block">
+      <mrow>
+        <msub><mi>z</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub>
+        <mo>=</mo>
+        <msub><mi>z</mi><mi>n</mi></msub>
+        <mo>−</mo>
+        <mfrac>
+          <mrow><mi>f</mi><mo>(</mo><msub><mi>z</mi><mi>n</mi></msub><mo>)</mo></mrow>
+          <mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><msub><mi>z</mi><mi>n</mi></msub><mo>)</mo></mrow>
+        </mfrac>
+      </mrow>
+    </math>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Kolme valittavaa polynomia: f(z)=z³−1 (juuret 1, −½+i√3/2, −½−i√3/2), f(z)=z⁴−1 (juuret ±1, ±i), f(z)=z⁵−z (juuret 0, ±1, ±i). 60 iteraatiota pikseliä kohti — Newtonin menetelmä suppenee neliöllisesti, joten useimmat pisteet löytävät juurensa alle 20 iteraatiossa; rajalla olevat pisteet vielä "kimpoilevat" 60 iteraationkin jälkeen, mikä on itse asiassa syy sille, että raja on fraktaali, ei laskentavirhe.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Three selectable polynomials: f(z)=z³−1 (roots 1, −½+i√3/2, −½−i√3/2), f(z)=z⁴−1 (roots ±1, ±i), f(z)=z⁵−z (roots 0, ±1, ±i). 60 iterations per pixel — Newton's method converges quadratically, so most points find their root in under 20 iterations; points on the boundary are still "bouncing" even after 60, which is precisely why the boundary is fractal, not a computation error.</p>
+      </div>
+    </div>
+
+    <div class="bilingual">
+      <div class="lang-block" lang="fi">
+        <span class="lang-tag" aria-hidden="true">FI</span>
+        <p>Laskettu WebGL2-fragmenttivarjostimessa, yksöistarkkuus. Mitattu (100 satunnaista testipistettä kutakin polynomia kohti, verrattuna kaksoistarkkuuden CPU-malliin): 99/100 (z³−1), 96/100 (z⁴−1), 100/100 (z⁵−z) — kaikki ylittävät 95 %:n tavoitteen. Erimielisyydet osuivat, kuten Näytteessä 010, altaiden rajoille.</p>
+      </div>
+      <div class="lang-block" lang="en">
+        <span class="lang-tag" aria-hidden="true">EN</span>
+        <p>Computed in a WebGL2 fragment shader, single precision. Measured (100 random test points per polynomial, against the double-precision CPU model): 99/100 (z³−1), 96/100 (z⁴−1), 100/100 (z⁵−z) — all above the 95% target. The disagreements landed on basin boundaries, same as Näyte 010.</p>
+      </div>
+    </div>
+
+    <div class="observation">
+      <p class="meta">Havainto · Observation</p>
+      <div class="bilingual">
+        <div class="lang-block" lang="fi">
+          <p>Napauta lähellä värialueiden rajaa: valkoinen rata ja sen oranssi kaksonen — vain miljoonasosan päässä toisistaan alussa — voivat päätyä täysin eri juureen.</p>
+        </div>
+        <div class="lang-block" lang="en">
+          <p>Click near a color boundary: the white path and its orange twin — starting only a millionth apart — can end up at completely different roots.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Kaaostoimisto · kaaoksen havaintoarkisto · Näyte 011</p>
+  </div>
+</footer>
+
+<script src="../../assets/sim.js"></script>
+<script src="newton.js"></script>
+</body>
+</html>

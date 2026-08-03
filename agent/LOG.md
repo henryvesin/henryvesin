@@ -63,3 +63,27 @@ Append-only. One line per run: date, type, what was made.
   integration (all `is-planned` grid cards gone, kartta cross-checked,
   full self-check pass, one commit or a PR per the normal run
   protocol).
+- 2026-08-03 — manual (direct request, continuing the same
+  owner-directed session as 002–010) — built Näyte 011 (Newton's
+  fractal): WebGL2 fragment shader doing per-pixel complex Newton
+  iteration for a selectable polynomial (z³−1, z⁴−1, z⁵−z), 60-step
+  cap (quadratic convergence means most points settle in <20 steps;
+  the rest are genuinely still on the chaotic boundary, not under-
+  iterated), click-to-overlay twin CPU trajectories 1e-6 apart to make
+  the boundary's sensitivity directly visible, and a committed PNG
+  fallback for the default polynomial. Reused 010's
+  `preserveDrawingBuffer`-before-first-draw and resize-before-draw
+  fixes and the shared `Kaaos.compileGLProgram`/`drawFullscreenQuad`
+  helpers verbatim — no new WebGL bugs surfaced this time. Verified
+  shader/CPU agreement in an actual browser (served locally, gl.readPixels
+  compared against the double-precision CPU model) rather than assumed:
+  99/100, 96/100, 100/100 across the three polynomials, all above the
+  95% target — a real measurement, not a guess, per the mistake noted
+  in the 002–010 entry above. One environment note: `python3` was
+  available for the fallback-PNG generation but neither `PIL`/Pillow
+  nor `numpy` were installed, so the PNG encoder (raw zlib + manual
+  IHDR/IDAT/IEND chunks) was hand-rolled rather than assumed available
+  — worth knowing for 012's programmatically-drawn image. Integrated:
+  `index.html` grid card swapped from `is-planned`, `CATALOGUE.md`
+  updated. Next up: 012 (Arnold's cat map), then 013, 014, then final
+  integration.
